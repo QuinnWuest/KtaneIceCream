@@ -1,15 +1,19 @@
 ﻿<!DOCTYPE html>
 <html class="no-js">
-<!--<![endif]-->
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Ice Cream - Keep Talking and Nobody Explodes Example Manual Page</title>
+    <title>Ice Cream — Keep Talking and Nobody Explodes Module</title>
     <meta name="viewport" content="initial-scale=1">
     <link href='https://fonts.googleapis.com/css?family=Special+Elite' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" type="text/css" href="css/normalize.css">
-    <link rel="stylesheet" type="text/css" href="https://ktane.timwi.de/HTML/css/main.css">
+    <link rel="stylesheet" type="text/css" href="css/main.css">
+    <style>
+        .allergy-table {
+            width: 100%;
+            margin-top: 1em;
+        }
+    </style>
 </head>
 <body>
     <div class="section">
@@ -22,6 +26,7 @@
                 <img src="img/Component.svg" class="diagram">
                 <h2>On the Subject of Ice Cream</h2>
                 <p class="flavour-text">Simon screams for ice cream!</p>
+
                 <ul>
                     <li>The module has a display with a customer's name, and a display with five types of ice cream.</li>
                     <li>Using the table, determine the allergies of the customer.</li>
@@ -29,34 +34,37 @@
                     <li>Press the 'sell' button once the correct ice cream flavour is selected. Repeat for all three customers.</li>
                     <li>Note that the ice cream parlour is not open all day! Only sell ice cream on even-numbered minutes! Selling ice cream on an odd-numbered minute causes a strike.</li>
                 </ul>
+                <!--<b><i>THE OPENING TIME IS TEMPORARILY DISABLED</i></b>-->
 
-                <b>Recipes for Ice Cream Flavours:</b>
-                <br>
-                <li><b>Tutti Frutti:</b> Vanilla Flavour, Fruit Pieces*.</li>
-                <li><b>Rocky Road:</b> Chocolate Flavour, Nuts, Marshmallows.</li>
-                <li><b>Raspberry Ripple:</b> Vanilla Flavour, Raspberry Sauce.</li>
-                <li><b>Double Chocolate:</b> Chocolate Flavour, Chocolate Chips.</li>
-                <li><b>Double Strawberry:</b> Strawberry Flavour, Strawberries.</li>
-                <li><b>Cookies and Cream:</b> Vanilla Flavour, Cookies.</li>
-                <li><b>Neapolitan:</b> Strawberry Flavour, Chocolate Flavour, Vanilla Flavour.</li>
-                <li><b>Mint Chocolate Chip:</b> Mint Flavour, Chocolate Chips.</li>
-                <li><b>The Classic:</b> Vanilla Flavour, Chocolate Sauce, Cherry.</li>
-                <li><b>Vanilla:</b> Vanilla Flavour.</li>
-                * Fruit pieces include strawberries, bananas, cherries, and raspberries.
-                <br><br>
+                <h3>Recipes for Ice Cream Flavours:</h3>
+                <ul>
+                    <li><b>Tutti Frutti:</b> Vanilla Flavour, Fruit Pieces*.</li>
+                    <li><b>Rocky Road:</b> Chocolate Flavour, Nuts, Marshmallows.</li>
+                    <li><b>Raspberry Ripple:</b> Vanilla Flavour, Raspberry Sauce.</li>
+                    <li><b>Double Chocolate:</b> Chocolate Flavour, Chocolate Chips.</li>
+                    <li><b>Double Strawberry:</b> Strawberry Flavour, Strawberries.</li>
+                    <li><b>Cookies and Cream:</b> Vanilla Flavour, Cookies.</li>
+                    <li><b>Neapolitan:</b> Strawberry Flavour, Chocolate Flavour, Vanilla Flavour.</li>
+                    <li><b>Mint Chocolate Chip:</b> Mint Flavour, Chocolate Chips.</li>
+                    <li><b>The Classic:</b> Vanilla Flavour, Chocolate Sauce, Cherry.</li>
+                    <li><b>Vanilla:</b> Vanilla Flavour.</li>
+                </ul>
+                <p class='footnote'>* Fruit pieces include strawberries, bananas, cherries, and raspberries.</p>
 
-                <b>Allergy Converter**:</b>
-                <li><b>Chocolate:</b> 0</li>
-                <li><b>Strawberry:</b> 1</li>
-                <li><b>Raspberry:</b> 2</li>
-                <li><b>Nuts:</b> 3</li>
-                <li><b>Cookies:</b> 4</li>
-                <li><b>Mint:</b> 5</li>
-                <li><b>Fruit:</b> 6*</li>
-                <li><b>Cherry:</b> 7</li>
-                <li><b>Marshmallows:</b> 8</li>
-                * Having a fruit allergy implies you are also allergic to strawberries, raspberries, and cherries.<br>
-                ** None of the customers are allergic to vanilla flavouring.
+                <h3>Allergy Converter**:</h3>
+                <ul>
+                    <li><b>Chocolate:</b> 0</li>
+                    <li><b>Strawberry:</b> 1</li>
+                    <li><b>Raspberry:</b> 2</li>
+                    <li><b>Nuts:</b> 3</li>
+                    <li><b>Cookies:</b> 4</li>
+                    <li><b>Mint:</b> 5</li>
+                    <li><b>Fruit:</b> 6*</li>
+                    <li><b>Cherry:</b> 7</li>
+                    <li><b>Marshmallows:</b> 8</li>
+                </ul>
+                <p class='footnote'>* Having a fruit allergy implies you are also allergic to strawberries, raspberries, and cherries.</p>
+                <p class='footnote'>** None of the customers are allergic to vanilla flavouring.</p>
             </div>
             <div class="page-footer relative-footer">Page 1 of 3</div>
         </div>
@@ -69,10 +77,10 @@
                 <p> To find out which ingredients the customer is allergic to, use the allergy table.</p>
                 <p> The rows are the customers, and the columns are the last digit of the serial number.</p>
                 <p><b>Allergy Table:</b></p>
-                <table class="repeaters-table">
+                <table class="allergy-table">
                     <tbody>
                         <tr>
-                            <th class="repeaters-spacer" colspan="1">
+                            <th class="corner">
                             <th>0-1</th>
                             <th>2-3</th>
                             <th>4-5</th>
@@ -252,7 +260,7 @@
             <div class="page-content">
                 <p>To find out which flavours to sell to the customer first, use the following table of flavour lists.</p>
                 <p>Read the table in normal reading order (left to right, then top to bottom) and choose the first applicable list.</p>
-                <p><b>Flavour List Table:</b></p>
+                <h3>Flavour List Table:</h3>
                 <table class="repeaters-table">
                     <tbody>
                         <tr>
@@ -261,28 +269,32 @@
                         </tr>
                         <tr>
                             <td>
-                                <li>Cookies and Cream</li>
-                                <li>Neapolitan</li>
-                                <li>Tutti Frutti</li>
-                                <li>The Classic</li>
-                                <li>Rocky Road</li>
-                                <li>Double Chocolate</li>
-                                <li>Mint Chocolate Chip</li>
-                                <li>Double Strawberry</li>
-                                <li>Raspberry Ripple</li>
-                                <li>Vanilla</li>
+                                <ul>
+                                    <li>Cookies and Cream</li>
+                                    <li>Neapolitan</li>
+                                    <li>Tutti Frutti</li>
+                                    <li>The Classic</li>
+                                    <li>Rocky Road</li>
+                                    <li>Double Chocolate</li>
+                                    <li>Mint Chocolate Chip</li>
+                                    <li>Double Strawberry</li>
+                                    <li>Raspberry Ripple</li>
+                                    <li>Vanilla</li>
+                                </ul>
                             </td>
                             <td>
-                                <li>Double Chocolate</li>
-                                <li>Mint Chocolate Chip</li>
-                                <li>Neapolitan</li>
-                                <li>Rocky Road</li>
-                                <li>Tutti Frutti</li>
-                                <li>Double Strawberry</li>
-                                <li>Cookies and Cream</li>
-                                <li>Raspberry Ripple</li>
-                                <li>The Classic</li>
-                                <li>Vanilla</li>
+                                <ul>
+                                    <li>Double Chocolate</li>
+                                    <li>Mint Chocolate Chip</li>
+                                    <li>Neapolitan</li>
+                                    <li>Rocky Road</li>
+                                    <li>Tutti Frutti</li>
+                                    <li>Double Strawberry</li>
+                                    <li>Cookies and Cream</li>
+                                    <li>Raspberry Ripple</li>
+                                    <li>The Classic</li>
+                                    <li>Vanilla</li>
+                                </ul>
                             </td>
                         </tr>
                         <tr>
@@ -291,28 +303,32 @@
                         </tr>
                         <tr>
                             <td>
-                                <li>Neapolitan</li>
-                                <li>Tutti Frutti</li>
-                                <li>Cookies and Cream</li>
-                                <li>Raspberry Ripple</li>
-                                <li>Double Strawberry</li>
-                                <li>Mint Chocolate Chip</li>
-                                <li>Double Chocolate</li>
-                                <li>The Classic</li>
-                                <li>Rocky Road</li>
-                                <li>Vanilla</li>
+                                <ul>
+                                    <li>Neapolitan</li>
+                                    <li>Tutti Frutti</li>
+                                    <li>Cookies and Cream</li>
+                                    <li>Raspberry Ripple</li>
+                                    <li>Double Strawberry</li>
+                                    <li>Mint Chocolate Chip</li>
+                                    <li>Double Chocolate</li>
+                                    <li>The Classic</li>
+                                    <li>Rocky Road</li>
+                                    <li>Vanilla</li>
+                                </ul>
                             </td>
                             <td>
-                                <li>Double Strawberry</li>
-                                <li>Cookies and Cream</li>
-                                <li>Rocky Road</li>
-                                <li>The Classic</li>
-                                <li>Neapolitan</li>
-                                <li>Double Chocolate</li>
-                                <li>Tutti Frutti</li>
-                                <li>Raspberry Ripple</li>
-                                <li>Mint Chocolate Chip</li>
-                                <li>Vanilla</li>
+                                <ul>
+                                    <li>Double Strawberry</li>
+                                    <li>Cookies and Cream</li>
+                                    <li>Rocky Road</li>
+                                    <li>The Classic</li>
+                                    <li>Neapolitan</li>
+                                    <li>Double Chocolate</li>
+                                    <li>Tutti Frutti</li>
+                                    <li>Raspberry Ripple</li>
+                                    <li>Mint Chocolate Chip</li>
+                                    <li>Vanilla</li>
+                                </ul>
                             </td>
                         </tr>
                     </tbody>

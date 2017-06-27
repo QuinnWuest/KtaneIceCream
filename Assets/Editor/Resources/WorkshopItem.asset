@@ -13,7 +13,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   WorkshopPublishedFileID: 956327753
   Title: Ice Cream
-  Description: Work in Progress
+  Description: 'I scream, you scream, we all scream for ice cream! Just make sure
+    you aren''t allergic...
+
+
+    HTML Manual: [Coming Soon]
+
+    PDF Manual: [Coming Soon]
+
+
+    Designed by SkiPP and LeGeND.'
   PreviewImage: {fileID: 2800000, guid: 4d41edc3b2189724fa157dc23c1c82f5, type: 3}
   Tags:
   - Regular Module

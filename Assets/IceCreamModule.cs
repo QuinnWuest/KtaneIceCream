@@ -47,7 +47,7 @@ public class IceCreamModule : MonoBehaviour {
         new Flavour("Neapolitan", Allergies.Strawberry, Allergies.Chocolate, Allergies.Fruit), // 6
         new Flavour("Mint Chocolate Chip", Allergies.Chocolate, Allergies.Mint), // 7
         new Flavour("The Classic", Allergies.Chocolate, Allergies.Cherry, Allergies.Fruit), // 8
-        new Flavour("Plain") // 9
+        new Flavour("Vanilla") // 9
     };
     int[][] FlavourLists = new int[][] {
         new int[] {5, 6, 0, 8, 1, 3, 7, 4, 2, 9}, // More LIT than UNLIT indicators.

@@ -214,15 +214,15 @@ public class IceCreamModule : MonoBehaviour {
         switch (button) {
             case -1:
                 RotateFlavours(-1);
-                LeftButton.AddInteractionPunch(0.1f);
+                LeftButton.AddInteractionPunch();
                 break;
             case 1:
                 RotateFlavours(1);
-                RightButton.AddInteractionPunch(0.1f);
+                RightButton.AddInteractionPunch();
                 break;
             case 0:
                 Submit();
-                SellButton.AddInteractionPunch(0.1f);
+                SellButton.AddInteractionPunch();
                 break;
             default:
                 BombModule.HandleStrike();

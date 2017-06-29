@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System.Collections.Generic;
 using System.Linq;
 
 using IceCream;
@@ -272,5 +273,37 @@ public class IceCreamModule : MonoBehaviour {
         if (currentStage > 0) { IndicatorLights[0].material = IndicatorMaterials[0]; } else { IndicatorLights[0].material = IndicatorMaterials[1]; }
         if (currentStage > 1) { IndicatorLights[1].material = IndicatorMaterials[0]; } else { IndicatorLights[1].material = IndicatorMaterials[1]; }
         if (currentStage > 2) { IndicatorLights[2].material = IndicatorMaterials[0]; } else { IndicatorLights[2].material = IndicatorMaterials[1]; }
+    }
+
+    KMSelectable[] ProcessTwitchCommand(string command) {
+        command = command.Trim().ToLowerInvariant();
+        var pieces = command.Split(new[] { ' ' }, System.StringSplitOptions.RemoveEmptyEntries);
+
+        var list = new List<KMSelectable>();
+        for (int i = 0; i < pieces.Length; i++) {
+            switch (pieces[i]) {
+                case "l":
+                case "left":
+                    list.Add(LeftButton);
+                    break;
+
+                case "r":
+                case "right":
+                    list.Add(RightButton);
+                    break;
+
+                case "s":
+                case "m":
+                case "sell":
+                case "submit":
+                case "middle":
+                    list.Add(SellButton);
+                    break;
+
+                default:
+                    return null;
+            }
+        }
+        return list.ToArray();
     }
 }

@@ -1,11 +1,14 @@
-﻿using UnityEngine;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-
 using IceCream;
+using UnityEngine;
 
-public class IceCreamModule : MonoBehaviour {
+using Random = UnityEngine.Random;
 
+public class IceCreamModule : MonoBehaviour
+{
     // Bomb and Module
     public KMBombInfo BombInfo;
     public KMBombModule BombModule;
@@ -21,19 +24,21 @@ public class IceCreamModule : MonoBehaviour {
     public TextMesh FlavourLabel;
 
     // Indicators
-    public Renderer[] IndicatorLights;
-    public Material[] IndicatorMaterials;
+    public GameObject[] Scoops;
+    private Vector3[] scoopPositions;
 
     // Module Identification (for logging)
     int moduleId;
     static int moduleIdCounter = 1;
 
     // Flavour Definitions
-    class Flavour {
+    class Flavour
+    {
         public string name;
         public Allergies[] allergies;
 
-        public Flavour(string name, params Allergies[] alg) {
+        public Flavour(string name, params Allergies[] alg)
+        {
             this.name = name;
             this.allergies = alg;
         }
@@ -58,7 +63,8 @@ public class IceCreamModule : MonoBehaviour {
     };
 
     // Allergy Definitions
-    enum Allergies {
+    enum Allergies
+    {
         Chocolate,
         Strawberry,
         Raspberry,
@@ -110,7 +116,8 @@ public class IceCreamModule : MonoBehaviour {
     int[] solCustomerNames;
     int[] solution;
 
-    void Start() {
+    void Start()
+    {
         moduleId = moduleIdCounter++;
 
         LeftButton.OnInteract += delegate { HandlePress(-1); return false; };
@@ -118,17 +125,28 @@ public class IceCreamModule : MonoBehaviour {
         SellButton.OnInteract += delegate { HandlePress(0); return false; };
 
         GetComponent<KMBombModule>().OnActivate += OnActivate;
+
+        scoopPositions = new Vector3[Scoops.Length];
+        for (int i = 0; i < Scoops.Length; i++)
+        {
+            scoopPositions[i] = Scoops[i].transform.localPosition;
+            Scoops[i].SetActive(false);
+        }
     }
 
-    void OnActivate() {
+    void OnActivate()
+    {
         // Conditional tally lookup.
-        foreach (object[] plate in BombInfo.GetPortPlates()) {
-            if (plate.Length == 0) {
+        foreach (object[] plate in BombInfo.GetPortPlates())
+        {
+            if (plate.Length == 0)
+            {
                 hasEmptyPortPlate = true;
                 break;
             }
         }
-        foreach (int digit in BombInfo.GetSerialNumberNumbers()) {
+        foreach (int digit in BombInfo.GetSerialNumberNumbers())
+        {
             lastDigit = digit;
         }
 
@@ -136,45 +154,52 @@ public class IceCreamModule : MonoBehaviour {
         UpdateDisplays();
     }
 
-    void GenerateSolutions() {
+    void GenerateSolutions()
+    {
         solCustomerNames = new int[maxStages];
         solution = new int[maxStages];
         flavourOptions = new int[maxStages][];
 
         // Choose correct flavour list if not done already.
-        if (list == null) {
-            if (BombInfo.GetOnIndicators().Count() > BombInfo.GetOffIndicators().Count()) { list = FlavourLists[0]; } 
-            else if (hasEmptyPortPlate) { list = FlavourLists[1]; } 
-            else if (BombInfo.GetBatteryCount() >= 3) { list = FlavourLists[2]; } 
+        if (list == null)
+        {
+            if (BombInfo.GetOnIndicators().Count() > BombInfo.GetOffIndicators().Count()) { list = FlavourLists[0]; }
+            else if (hasEmptyPortPlate) { list = FlavourLists[1]; }
+            else if (BombInfo.GetBatteryCount() >= 3) { list = FlavourLists[2]; }
             else { list = FlavourLists[3]; }
         }
 
         // Generate solution per stage.
-        for (int i = 0; i < maxStages; i++) {
+        for (int i = 0; i < maxStages; i++)
+        {
             solCustomerNames[i] = -1;
             int customerID = -1;
             int[] stageFlavours = new int[5];
             int flavourId = -1;
 
             // Create list of selectable flavours for the stage.
-            for (int si = 0; si < 4; si++) {
+            for (int si = 0; si < 4; si++)
+            {
                 stageFlavours[si] = -1;
-                while (System.Array.Exists(stageFlavours, x => x == flavourId))
+                while (Array.Exists(stageFlavours, x => x == flavourId))
                     flavourId = Random.Range(0, Flavours.Length - 2);
                 stageFlavours[si] = flavourId;
             }
             stageFlavours[4] = 9;
 
             // Choose a customer for the stage.
-            while (System.Array.Exists(solCustomerNames, x => x == customerID))
+            while (Array.Exists(solCustomerNames, x => x == customerID))
                 customerID = Random.Range(0, CustomerNames.Length - 1);
 
             // Determine if the customer is allergic to any of the chosen flavours.
             bool[] bad = new bool[stageFlavours.Length];
-            for (int j = 0; j < 3; j++) {
+            for (int j = 0; j < 3; j++)
+            {
                 int allergy = AllergyTable[customerID, lastDigit / 2, j];
-                for (int k = 0; k < stageFlavours.Length; k++) {
-                    if (Flavours[stageFlavours[k]].allergies.Contains((Allergies)allergy) && !bad[k]) {
+                for (int k = 0; k < stageFlavours.Length; k++)
+                {
+                    if (Flavours[stageFlavours[k]].allergies.Contains((Allergies) allergy) && !bad[k])
+                    {
                         bad[k] = true;
                     }
                 }
@@ -183,10 +208,13 @@ public class IceCreamModule : MonoBehaviour {
             // Determine which acceptable flavour comes first in the flavour list.
             int lowestNum = 9;
             int sol = 4;
-            for (int l = 0; l < stageFlavours.Length; l++) {
-                if (!bad[l]) {
-                    if (System.Array.IndexOf(list, stageFlavours[l]) < lowestNum) {
-                        lowestNum = System.Array.IndexOf(list, stageFlavours[l]);
+            for (int l = 0; l < stageFlavours.Length; l++)
+            {
+                if (!bad[l])
+                {
+                    if (Array.IndexOf(list, stageFlavours[l]) < lowestNum)
+                    {
+                        lowestNum = Array.IndexOf(list, stageFlavours[l]);
                         sol = l;
                     }
                 }
@@ -204,15 +232,18 @@ public class IceCreamModule : MonoBehaviour {
         Debug.LogFormat("[Ice Cream #{0}] Customers: '{1}', '{2}', '{3}'", moduleId, CustomerNames[solCustomerNames[0]], CustomerNames[solCustomerNames[1]], CustomerNames[solCustomerNames[2]]);
     }
 
-    void UpdateDisplays() {
+    void UpdateDisplays()
+    {
         CustomerLabel.text = CustomerNames[solCustomerNames[currentStage]];
         FlavourLabel.text = Flavours[flavourOptions[currentStage][currentFlavour]].name;
     }
 
-    void HandlePress(int button) {
+    void HandlePress(int button)
+    {
         Audio.PlaySoundAtTransform("tick", this.transform);
 
-        switch (button) {
+        switch (button)
+        {
             case -1:
                 RotateFlavours(-1);
                 LeftButton.AddInteractionPunch();
@@ -231,7 +262,8 @@ public class IceCreamModule : MonoBehaviour {
         }
     }
 
-    void RotateFlavours(int dir) {
+    void RotateFlavours(int dir)
+    {
         // Choose next flavour to display.
         currentFlavour += dir;
         if (currentFlavour < 0) currentFlavour += flavourOptions[currentStage].Length;
@@ -240,18 +272,28 @@ public class IceCreamModule : MonoBehaviour {
         UpdateDisplays();
     }
 
-    void Submit() {
-        if ((int)(BombInfo.GetTime() / 60) % 2 == 0) { // Check if submitted on an even minute.
-            if (currentStage < maxStages && currentFlavour == solution[currentStage]) {
+    void Submit()
+    {
+        // Check if submitted on an even minute.
+        if ((int) (BombInfo.GetTime() / 60) % 2 == 0)
+        {
+            if (currentStage < maxStages && currentFlavour == solution[currentStage])
+            {
                 Debug.LogFormat("[Ice Cream #{0}] Flavour '{1}' for customer '{2}' submitted correctly.", moduleId, Flavours[flavourOptions[currentStage][currentFlavour]].name, CustomerNames[solCustomerNames[currentStage]]);
                 currentStage++;
-                if (currentStage >= maxStages) {
+                if (currentStage >= maxStages)
+                {
                     BombModule.HandlePass();
-                } else {
+                }
+                else
+                {
                     UpdateDisplays();
                 }
-            } else {
-                if (currentStage < maxStages) {
+            }
+            else
+            {
+                if (currentStage < maxStages)
+                {
                     Debug.LogFormat("[Ice Cream #{0}] Flavour '{1}' for customer '{2}' submitted incorrectly.", moduleId, Flavours[flavourOptions[currentStage][currentFlavour]].name, CustomerNames[solCustomerNames[currentStage]]);
                     currentStage = 0;
                     BombModule.HandleStrike();
@@ -259,8 +301,11 @@ public class IceCreamModule : MonoBehaviour {
                     UpdateDisplays();
                 }
             }
-        } else {
-            if (currentStage < maxStages) {
+        }
+        else
+        {
+            if (currentStage < maxStages)
+            {
                 Debug.LogFormat("[Ice Cream #{0}] Flavour '{1}' for customer '{2}' submitted while parlour is closed.", moduleId, Flavours[flavourOptions[currentStage][currentFlavour]].name, CustomerNames[solCustomerNames[currentStage]]);
                 currentStage = 0;
                 BombModule.HandleStrike();
@@ -270,18 +315,45 @@ public class IceCreamModule : MonoBehaviour {
         }
 
         // Update stage indicator.
-        if (currentStage > 0) { IndicatorLights[0].material = IndicatorMaterials[0]; } else { IndicatorLights[0].material = IndicatorMaterials[1]; }
-        if (currentStage > 1) { IndicatorLights[1].material = IndicatorMaterials[0]; } else { IndicatorLights[1].material = IndicatorMaterials[1]; }
-        if (currentStage > 2) { IndicatorLights[2].material = IndicatorMaterials[0]; } else { IndicatorLights[2].material = IndicatorMaterials[1]; }
+        for (int i = 0; i < 3; i++)
+            if (Scoops[i].activeSelf != currentStage > i)
+                StartCoroutine(SwitchScoop(i, currentStage > i));
     }
 
-    KMSelectable[] ProcessTwitchCommand(string command) {
+    private IEnumerator SwitchScoop(int ix, bool activate)
+    {
+        var offset = new Vector3(Random.Range(0f, 1f) - .5f, 1f, Random.Range(0f, .6f) - .3f);
+        if (activate)
+        {
+            Scoops[ix].SetActive(true);
+            Scoops[ix].transform.localRotation = Quaternion.Euler(Random.Range(0, 360f), Random.Range(0, 360f), Random.Range(0, 360f));
+            for (int i = 0; i <= 99; i += 3)
+            {
+                Scoops[ix].transform.localPosition = scoopPositions[ix] + (99 - i) * .1f * offset;
+                yield return null;
+            }
+        }
+        else
+        {
+            for (int i = 0; i <= 99; i += 3)
+            {
+                Scoops[ix].transform.localPosition = scoopPositions[ix] + i * .1f * offset;
+                yield return null;
+            }
+            Scoops[ix].SetActive(false);
+        }
+    }
+
+    KMSelectable[] ProcessTwitchCommand(string command)
+    {
         command = command.Trim().ToLowerInvariant();
-        var pieces = command.Split(new[] { ' ' }, System.StringSplitOptions.RemoveEmptyEntries);
+        var pieces = command.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
 
         var list = new List<KMSelectable>();
-        for (int i = 0; i < pieces.Length; i++) {
-            switch (pieces[i]) {
+        for (int i = 0; i < pieces.Length; i++)
+        {
+            switch (pieces[i])
+            {
                 case "l":
                 case "left":
                     list.Add(LeftButton);

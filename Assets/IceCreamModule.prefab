@@ -37,6 +37,7 @@ GameObject:
   - 4: {fileID: 4000011865387290}
   - 33: {fileID: 33000010846003606}
   - 23: {fileID: 23000010917416136}
+  - 114: {fileID: 114000010687908938}
   m_Layer: 0
   m_Name: IceCreamCone
   m_TagString: Untagged
@@ -161,6 +162,7 @@ GameObject:
   - 4: {fileID: 4000011587702434}
   - 33: {fileID: 33000012246777996}
   - 23: {fileID: 23000010994315422}
+  - 114: {fileID: 114000010566068566}
   m_Layer: 0
   m_Name: Scoop 2
   m_TagString: Untagged
@@ -388,6 +390,7 @@ GameObject:
   - 4: {fileID: 4000011848366808}
   - 33: {fileID: 33000010265742978}
   - 23: {fileID: 23000012687319164}
+  - 114: {fileID: 114000012467992330}
   m_Layer: 0
   m_Name: Scoop 3
   m_TagString: Untagged
@@ -423,6 +426,7 @@ GameObject:
   - 4: {fileID: 4000012976578838}
   - 33: {fileID: 33000010295859498}
   - 23: {fileID: 23000011531712624}
+  - 114: {fileID: 114000013179912922}
   m_Layer: 0
   m_Name: Scoop 1
   m_TagString: Untagged
@@ -1490,6 +1494,32 @@ MonoBehaviour:
   AllowSelectionWrapY: 0
   ForceSelectionHighlight: 0
   ForceInteractionHighlight: 0
+--- !u!114 &114000010566068566
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000011281291110}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1005838349, guid: 45b809be76fd7a3468b6f517bced6f28, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShaderNames:
+  - Legacy Shaders/Bumped Diffuse
+--- !u!114 &114000010687908938
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000010365939528}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1005838349, guid: 45b809be76fd7a3468b6f517bced6f28, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShaderNames:
+  - Legacy Shaders/Diffuse
 --- !u!114 &114000010722785178
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1682,6 +1712,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ShaderNames:
   - GUI/KT 3D Text
+--- !u!114 &114000012467992330
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000013758537334}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1005838349, guid: 45b809be76fd7a3468b6f517bced6f28, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShaderNames:
+  - Legacy Shaders/Bumped Diffuse
 --- !u!114 &114000013043402824
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1704,6 +1747,19 @@ MonoBehaviour:
   AllowSelectionWrapY: 0
   ForceSelectionHighlight: 0
   ForceInteractionHighlight: 0
+--- !u!114 &114000013179912922
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000014145592064}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1005838349, guid: 45b809be76fd7a3468b6f517bced6f28, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShaderNames:
+  - Legacy Shaders/Bumped Diffuse
 --- !u!114 &114000013583317070
 MonoBehaviour:
   m_ObjectHideFlags: 1

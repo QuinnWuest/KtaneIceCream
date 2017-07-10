@@ -151,6 +151,7 @@ public class IceCreamModule : MonoBehaviour
         }
 
         GenerateSolutions();
+        LogCurrentStage();
         UpdateDisplays();
     }
 
@@ -225,11 +226,19 @@ public class IceCreamModule : MonoBehaviour
             solCustomerNames[i] = customerID;
             flavourOptions[i] = stageFlavours;
 
-            Debug.LogFormat("[Ice Cream #{0}] Stage {1} Flavour Options: '{2}', '{3}', '{4}', '{5}', '{6}'", moduleId, i + 1, Flavours[flavourOptions[i][0]].name, Flavours[flavourOptions[i][1]].name, Flavours[flavourOptions[i][2]].name, Flavours[flavourOptions[i][3]].name, Flavours[flavourOptions[i][4]].name);
+            //Debug.LogFormat("[Ice Cream #{0}] Stage {1} Flavour Options: '{2}', '{3}', '{4}', '{5}', '{6}'", moduleId, i + 1, Flavours[flavourOptions[i][0]].name, Flavours[flavourOptions[i][1]].name, Flavours[flavourOptions[i][2]].name, Flavours[flavourOptions[i][3]].name, Flavours[flavourOptions[i][4]].name);
         }
 
-        Debug.LogFormat("[Ice Cream #{0}] Solution: '{1}', '{2}', '{3}'", moduleId, Flavours[flavourOptions[0][solution[0]]].name, Flavours[flavourOptions[1][solution[1]]].name, Flavours[flavourOptions[2][solution[2]]].name);
-        Debug.LogFormat("[Ice Cream #{0}] Customers: '{1}', '{2}', '{3}'", moduleId, CustomerNames[solCustomerNames[0]], CustomerNames[solCustomerNames[1]], CustomerNames[solCustomerNames[2]]);
+        //Debug.LogFormat("[Ice Cream #{0}] Solution: '{1}', '{2}', '{3}'", moduleId, Flavours[flavourOptions[0][solution[0]]].name, Flavours[flavourOptions[1][solution[1]]].name, Flavours[flavourOptions[2][solution[2]]].name);
+        //Debug.LogFormat("[Ice Cream #{0}] Customers: '{1}', '{2}', '{3}'", moduleId, CustomerNames[solCustomerNames[0]], CustomerNames[solCustomerNames[1]], CustomerNames[solCustomerNames[2]]);
+    }
+
+    void LogCurrentStage() 
+    {
+        Debug.LogFormat("[Ice Cream #{0}] Stage {1}\nCustomer: {2}\nFlavour Options: {3}, {4}, {5}, {6}, {7}\nSolution: {8}", 
+            moduleId, currentStage + 1, CustomerNames[solCustomerNames[currentStage]], 
+            Flavours[flavourOptions[currentStage][0]].name, Flavours[flavourOptions[currentStage][1]].name, Flavours[flavourOptions[currentStage][2]].name, Flavours[flavourOptions[currentStage][3]].name, Flavours[flavourOptions[currentStage][4]].name, 
+            Flavours[flavourOptions[currentStage][solution[currentStage]]].name);
     }
 
     void UpdateDisplays()
@@ -279,7 +288,8 @@ public class IceCreamModule : MonoBehaviour
         {
             if (currentStage < maxStages && currentFlavour == solution[currentStage])
             {
-                Debug.LogFormat("[Ice Cream #{0}] Flavour '{1}' for customer '{2}' submitted correctly.", moduleId, Flavours[flavourOptions[currentStage][currentFlavour]].name, CustomerNames[solCustomerNames[currentStage]]);
+                //Debug.LogFormat("[Ice Cream #{0}] Flavour '{1}' for customer '{2}' submitted correctly.", moduleId, Flavours[flavourOptions[currentStage][currentFlavour]].name, CustomerNames[solCustomerNames[currentStage]]);
+                Debug.LogFormat("[Ice Cream #{0}] {1} is correct.", moduleId, Flavours[flavourOptions[currentStage][currentFlavour]].name);
                 currentStage++;
                 if (currentStage >= maxStages)
                 {
@@ -287,6 +297,7 @@ public class IceCreamModule : MonoBehaviour
                 }
                 else
                 {
+                    LogCurrentStage();
                     UpdateDisplays();
                 }
             }
@@ -294,10 +305,12 @@ public class IceCreamModule : MonoBehaviour
             {
                 if (currentStage < maxStages)
                 {
-                    Debug.LogFormat("[Ice Cream #{0}] Flavour '{1}' for customer '{2}' submitted incorrectly.", moduleId, Flavours[flavourOptions[currentStage][currentFlavour]].name, CustomerNames[solCustomerNames[currentStage]]);
-                    currentStage = 0;
+                    //Debug.LogFormat("[Ice Cream #{0}] Flavour '{1}' for customer '{2}' submitted incorrectly.", moduleId, Flavours[flavourOptions[currentStage][currentFlavour]].name, CustomerNames[solCustomerNames[currentStage]]);
+                    Debug.LogFormat("[Ice Cream #{0}] {1} is incorrect.", moduleId, Flavours[flavourOptions[currentStage][currentFlavour]].name);
+                    //currentStage = 0;
                     BombModule.HandleStrike();
                     GenerateSolutions();
+                    LogCurrentStage();
                     UpdateDisplays();
                 }
             }
@@ -306,10 +319,12 @@ public class IceCreamModule : MonoBehaviour
         {
             if (currentStage < maxStages)
             {
-                Debug.LogFormat("[Ice Cream #{0}] Flavour '{1}' for customer '{2}' submitted while parlour is closed.", moduleId, Flavours[flavourOptions[currentStage][currentFlavour]].name, CustomerNames[solCustomerNames[currentStage]]);
-                currentStage = 0;
+                ///Debug.LogFormat("[Ice Cream #{0}] Flavour '{1}' for customer '{2}' submitted while parlour is closed.", moduleId, Flavours[flavourOptions[currentStage][currentFlavour]].name, CustomerNames[solCustomerNames[currentStage]]);
+                Debug.LogFormat("[Ice Cream #{0}] {1} submitted when parlour is closed.", moduleId, Flavours[flavourOptions[currentStage][currentFlavour]].name);
+                //currentStage = 0;
                 BombModule.HandleStrike();
                 GenerateSolutions();
+                LogCurrentStage();
                 UpdateDisplays();
             }
         }

@@ -167,9 +167,6 @@ PlayerSettings:
   iOSDeviceRequirements: []
   iOSURLSchemes: []
   appleDeveloperTeamID: 
-  iOSManualSigningProvisioningProfileID: 
-  tvOSManualSigningProvisioningProfileID: 
-  appleEnableAutomaticSigning: 0
   AndroidTargetDevice: 0
   AndroidSplashScreenScale: 0
   androidSplashScreen: {fileID: 0}
@@ -193,11 +190,11 @@ PlayerSettings:
       m_Height: 128
   m_BuildTargetBatching: []
   m_BuildTargetGraphicsAPIs:
-  - m_BuildTarget: MacStandaloneSupport
-    m_APIs: 110000000000000010000000
-    m_Automatic: 0
   - m_BuildTarget: WindowsStandaloneSupport
     m_APIs: 110000000200000001000000
+    m_Automatic: 0
+  - m_BuildTarget: MacStandaloneSupport
+    m_APIs: 110000000000000010000000
     m_Automatic: 0
   - m_BuildTarget: LinuxStandaloneSupport
     m_APIs: 1100000000000000
@@ -316,9 +313,6 @@ PlayerSettings:
   ps4attribShareSupport: 0
   ps4attribExclusiveVR: 0
   ps4disableAutoHideSplash: 0
-  ps4videoRecordingFeaturesUsed: 0
-  ps4contentSearchFeaturesUsed: 0
-  ps4attribEyeToEyeDistanceSettingVR: 0
   ps4IncludedModules: []
   monoEnv: 
   psp2Splashimage: {fileID: 0}
@@ -442,9 +436,13 @@ PlayerSettings:
   - Android::ScriptingBackend
   - Standalone::ScriptingBackend
   - WebPlayer::ScriptingBackend
+  - iOS::Architecture
+  - iOS::ScriptingBackend
   Android::ScriptingBackend: 0
   Standalone::ScriptingBackend: 0
   WebPlayer::ScriptingBackend: 0
+  iOS::Architecture: 2
+  iOS::ScriptingBackend: 1
   boolPropertyNames:
   - Android::VR::enable
   - Metro::VR::enable

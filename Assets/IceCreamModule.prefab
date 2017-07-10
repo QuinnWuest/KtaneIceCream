@@ -37,6 +37,7 @@ GameObject:
   - 4: {fileID: 4000011865387290}
   - 33: {fileID: 33000010846003606}
   - 23: {fileID: 23000010917416136}
+  - 114: {fileID: 114000013638135076}
   m_Layer: 0
   m_Name: IceCreamCone
   m_TagString: Untagged
@@ -161,6 +162,7 @@ GameObject:
   - 4: {fileID: 4000011587702434}
   - 33: {fileID: 33000012246777996}
   - 23: {fileID: 23000010994315422}
+  - 114: {fileID: 114000010079817608}
   m_Layer: 0
   m_Name: Scoop 2
   m_TagString: Untagged
@@ -388,6 +390,7 @@ GameObject:
   - 4: {fileID: 4000011848366808}
   - 33: {fileID: 33000010265742978}
   - 23: {fileID: 23000012687319164}
+  - 114: {fileID: 114000011271759444}
   m_Layer: 0
   m_Name: Scoop 3
   m_TagString: Untagged
@@ -423,6 +426,7 @@ GameObject:
   - 4: {fileID: 4000012976578838}
   - 33: {fileID: 33000010295859498}
   - 23: {fileID: 23000011531712624}
+  - 114: {fileID: 114000012989815960}
   m_Layer: 0
   m_Name: Scoop 1
   m_TagString: Untagged
@@ -605,7 +609,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1000013758537334}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.2, y: 2.3, z: -0}
+  m_LocalPosition: {x: -0.23, y: 2.3, z: -0}
   m_LocalScale: {x: 0.8, y: 0.8, z: 0.8}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children: []
@@ -617,10 +621,10 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1000010365939528}
-  m_LocalRotation: {x: 0.57251984, y: 0.20845586, z: -0.15340626, w: 0.77796775}
-  m_LocalPosition: {x: -0.083, y: 0.0137, z: -0.01}
+  m_LocalRotation: {x: 0.5786124, y: 0.20724456, z: -0.15503874, w: 0.7734471}
+  m_LocalPosition: {x: -0.0831, y: 0.0143, z: -0.0102}
   m_LocalScale: {x: 0.035, y: 0.035, z: 0.035}
-  m_LocalEulerAnglesHint: {x: 72.7, y: 30, z: 0}
+  m_LocalEulerAnglesHint: {x: 73.6, y: 30, z: 0}
   m_Children:
   - {fileID: 4000012976578838}
   - {fileID: 4000011587702434}
@@ -1433,6 +1437,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   HighlightScale: {x: 0, y: 0, z: 0}
   OutlineAmount: 0
+--- !u!114 &114000010079817608
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000011281291110}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1005838349, guid: 45b809be76fd7a3468b6f517bced6f28, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShaderNames:
+  - Legacy Shaders/Bumped Diffuse
 --- !u!114 &114000010096887790
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1542,6 +1559,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ShaderNames:
   - GUI/KT 3D Text
+--- !u!114 &114000011271759444
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000013758537334}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1005838349, guid: 45b809be76fd7a3468b6f517bced6f28, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShaderNames:
+  - Legacy Shaders/Bumped Diffuse
 --- !u!114 &114000011566971644
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1682,6 +1712,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ShaderNames:
   - GUI/KT 3D Text
+--- !u!114 &114000012989815960
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000014145592064}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1005838349, guid: 45b809be76fd7a3468b6f517bced6f28, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShaderNames:
+  - Legacy Shaders/Bumped Diffuse
 --- !u!114 &114000013043402824
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1740,6 +1783,19 @@ MonoBehaviour:
   m_Script: {fileID: -1675560866, guid: 45b809be76fd7a3468b6f517bced6f28, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &114000013638135076
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000010365939528}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1005838349, guid: 45b809be76fd7a3468b6f517bced6f28, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShaderNames:
+  - Legacy Shaders/Diffuse
 --- !u!114 &114000013846754654
 MonoBehaviour:
   m_ObjectHideFlags: 1

@@ -295,7 +295,7 @@ public class IceCreamModule : MonoBehaviour
                 if (currentStage < maxStages)
                 {
                     Debug.LogFormat("[Ice Cream #{0}] Flavour '{1}' for customer '{2}' submitted incorrectly.", moduleId, Flavours[flavourOptions[currentStage][currentFlavour]].name, CustomerNames[solCustomerNames[currentStage]]);
-                    //currentStage = 0;
+                    currentStage = 0;
                     BombModule.HandleStrike();
                     GenerateSolutions();
                     UpdateDisplays();
@@ -307,7 +307,7 @@ public class IceCreamModule : MonoBehaviour
             if (currentStage < maxStages)
             {
                 Debug.LogFormat("[Ice Cream #{0}] Flavour '{1}' for customer '{2}' submitted while parlour is closed.", moduleId, Flavours[flavourOptions[currentStage][currentFlavour]].name, CustomerNames[solCustomerNames[currentStage]]);
-                //currentStage = 0;
+                currentStage = 0;
                 BombModule.HandleStrike();
                 GenerateSolutions();
                 UpdateDisplays();

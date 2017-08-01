@@ -359,24 +359,57 @@ public class IceCreamModule : MonoBehaviour
         }
     }
 
-    KMSelectable[] ProcessTwitchCommand(string command)
+    public IEnumerator ProcessTwitchCommand(string command)
     {
         command = command.Trim().ToLowerInvariant();
-        var pieces = command.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
 
-        var list = new List<KMSelectable>();
+        string[] pieces = command.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+
+        if (((pieces[0] == "submit") || (pieces[0] == "sell"))
+            && (pieces.Length > 1))
+        {
+            string originalLabel = FlavourLabel.text;
+            do
+            {
+                string testString = FlavourLabel.text.Split(' ')[0];
+                if (testString.Equals(pieces[1], StringComparison.InvariantCultureIgnoreCase))
+                {
+                    yield return SellButton;
+                    yield return SellButton;
+                    yield break;
+                }
+                yield return RightButton;
+                yield return new WaitForSeconds(0.25f);
+                yield return RightButton;
+            } while (FlavourLabel.text != originalLabel);
+            yield break;
+        }
+        else if (pieces[0] == "cycle")
+        {
+            string originalLabel = FlavourLabel.text;
+            do
+            {
+                yield return RightButton;
+                yield return new WaitForSeconds(1.5f);
+                yield return RightButton;
+            } while (FlavourLabel.text != originalLabel);
+            yield break;
+        }
+
         for (int i = 0; i < pieces.Length; i++)
         {
             switch (pieces[i])
             {
                 case "l":
                 case "left":
-                    list.Add(LeftButton);
+                    yield return LeftButton;
+                    yield return LeftButton;
                     break;
 
                 case "r":
                 case "right":
-                    list.Add(RightButton);
+                    yield return RightButton;
+                    yield return RightButton;
                     break;
 
                 case "s":
@@ -384,13 +417,13 @@ public class IceCreamModule : MonoBehaviour
                 case "sell":
                 case "submit":
                 case "middle":
-                    list.Add(SellButton);
-                    break;
+                    yield return SellButton;
+                    yield return SellButton;
+                    yield break;
 
                 default:
-                    return null;
+                    yield break;
             }
         }
-        return list.ToArray();
     }
 }

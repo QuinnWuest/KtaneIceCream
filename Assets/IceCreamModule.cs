@@ -370,20 +370,23 @@ public class IceCreamModule : MonoBehaviour
         }
     }
 
+    public string TwitchHelpMessage = "Move left/right with !{0} left and !{0} right. Cycle the flavors with !{0} cycle. Sell the currently selected flavour with !{0} sell. Sell a specific flavour with !{0} sell flavour";
+    public string[] TwitchValidCommands = { "^(cycle|left|right|l|r|sell|submit|middle|s|m)( .*)?" };
     public IEnumerator ProcessTwitchCommand(string command)
     {
         command = command.Trim().ToLowerInvariant();
 
         string[] pieces = command.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
 
-        if (((pieces[0] == "submit") || (pieces[0] == "sell"))
+        if (((pieces[0] == "submit") || (pieces[0] == "sell") || (pieces[0] == "middle") || (pieces[0] == "s") || (pieces[0] == "m"))
             && (pieces.Length > 1))
         {
+            command = command.Remove(0, pieces[0].Length + 1);
             string originalLabel = FlavourLabel.text;
             do
             {
-                string testString = FlavourLabel.text.Split(' ')[0];
-                if (testString.Equals(pieces[1], StringComparison.InvariantCultureIgnoreCase))
+                string testString = FlavourLabel.text;
+                if (testString.StartsWith(command, StringComparison.InvariantCultureIgnoreCase))
                 {
                     yield return SellButton;
                     yield return SellButton;

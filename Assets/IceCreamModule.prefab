@@ -520,7 +520,7 @@ Transform:
   m_GameObject: {fileID: 1000010831912150}
   m_LocalRotation: {x: -0.000000115202326, y: 0.7071067, z: -0.7071068, w: -0.000000115202305}
   m_LocalPosition: {x: 0, y: 0.0213, z: 0}
-  m_LocalScale: {x: 0.0043478264, y: 0.009999992, z: 0.009999992}
+  m_LocalScale: {x: 0.002173913, y: 0.004999996, z: 0.004999996}
   m_LocalEulerAnglesHint: {x: 89.980194, y: -180, z: 0}
   m_Children: []
   m_Father: {fileID: 4000013351723548}
@@ -869,7 +869,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_Materials:
-  - {fileID: 2100000, guid: ebb44808d1e86384ba7b4cb463582171, type: 2}
+  - {fileID: 2100000, guid: 70b26619f487b5148af4c660372d376e, type: 2}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
@@ -1101,7 +1101,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_Materials:
-  - {fileID: 2100000, guid: 5b134a82af3d70a4f9795ebe79b74525, type: 2}
+  - {fileID: 2100000, guid: b70c002f680c10148addcfe1da950b6f, type: 2}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
@@ -1354,7 +1354,7 @@ TextMesh:
   m_Anchor: 4
   m_Alignment: 1
   m_TabSize: 4
-  m_FontSize: 55
+  m_FontSize: 110
   m_FontStyle: 0
   m_RichText: 1
   m_Font: {fileID: 12800000, guid: 1ebe1d96973a920409b439b3a0e2bb63, type: 3}
@@ -1819,6 +1819,17 @@ MonoBehaviour:
   - {fileID: 1000014145592064}
   - {fileID: 1000011281291110}
   - {fileID: 1000013758537334}
+  FlavourMaterials:
+  - {fileID: 2100000, guid: a61b340a263ee524e8bc8f9e0be4f93c, type: 2}
+  - {fileID: 2100000, guid: bc1e97e73c60823408f8bc4e7825df7c, type: 2}
+  - {fileID: 2100000, guid: 6c4d1ede99153d34596a5da72bf09ed3, type: 2}
+  - {fileID: 2100000, guid: ebb44808d1e86384ba7b4cb463582171, type: 2}
+  - {fileID: 2100000, guid: 79dbe2a3004f31e4aaaed959593383c3, type: 2}
+  - {fileID: 2100000, guid: 6a1a20b1adecf30489ef4a1116b9e5a5, type: 2}
+  - {fileID: 2100000, guid: b70c002f680c10148addcfe1da950b6f, type: 2}
+  - {fileID: 2100000, guid: 70b26619f487b5148af4c660372d376e, type: 2}
+  - {fileID: 2100000, guid: 5b134a82af3d70a4f9795ebe79b74525, type: 2}
+  - {fileID: 2100000, guid: 5b134a82af3d70a4f9795ebe79b74525, type: 2}
 --- !u!114 &114000014098758768
 MonoBehaviour:
   m_ObjectHideFlags: 1

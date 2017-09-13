@@ -13,5 +13,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: iceCream
   title: Ice Cream
-  version: 1.4
+  version: 1.6
   outputFolder: build

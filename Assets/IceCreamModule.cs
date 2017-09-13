@@ -26,6 +26,7 @@ public class IceCreamModule : MonoBehaviour
     // Indicators
     public GameObject[] Scoops;
     private Vector3[] scoopPositions;
+    public Material[] FlavourMaterials;
 
     // Module Identification (for logging)
     int moduleId;
@@ -115,10 +116,13 @@ public class IceCreamModule : MonoBehaviour
     int[] list = null;
     int[] solCustomerNames;
     int[] solution;
+    int[] correctFlavours;
 
     void Start()
     {
         moduleId = moduleIdCounter++;
+
+        correctFlavours = new int[maxStages];
 
         LeftButton.OnInteract += delegate { HandlePress(-1); return false; };
         RightButton.OnInteract += delegate { HandlePress(1); return false; };
@@ -176,6 +180,10 @@ public class IceCreamModule : MonoBehaviour
             solCustomerNames[i] = -1;
             int customerID = -1;
             int[] stageFlavours = new int[5];
+
+            for (int j = 0; j < 5; j++)
+                stageFlavours[j] = -1;
+
             int flavourId = -1;
 
             // Create list of selectable flavours for the stage.
@@ -183,14 +191,14 @@ public class IceCreamModule : MonoBehaviour
             {
                 stageFlavours[si] = -1;
                 while (Array.Exists(stageFlavours, x => x == flavourId))
-                    flavourId = Random.Range(0, Flavours.Length - 2);
+                    flavourId = Random.Range(0, Flavours.Length - 1);
                 stageFlavours[si] = flavourId;
             }
             stageFlavours[4] = 9;
 
             // Choose a customer for the stage.
             while (Array.Exists(solCustomerNames, x => x == customerID))
-                customerID = Random.Range(0, CustomerNames.Length - 1);
+                customerID = Random.Range(0, CustomerNames.Length);
 
             // Determine if the customer is allergic to any of the chosen flavours.
             bool[] bad = new bool[stageFlavours.Length];
@@ -290,6 +298,8 @@ public class IceCreamModule : MonoBehaviour
             {
                 //Debug.LogFormat("[Ice Cream #{0}] Flavour '{1}' for customer '{2}' submitted correctly.", moduleId, Flavours[flavourOptions[currentStage][currentFlavour]].name, CustomerNames[solCustomerNames[currentStage]]);
                 Debug.LogFormat("[Ice Cream #{0}] {1} is correct.", moduleId, Flavours[flavourOptions[currentStage][currentFlavour]].name);
+                correctFlavours[currentStage] = flavourOptions[currentStage][currentFlavour];
+                Scoops[currentStage].GetComponent<MeshRenderer>().sharedMaterial = FlavourMaterials[flavourOptions[currentStage][currentFlavour]];
                 currentStage++;
                 if (currentStage >= maxStages)
                 {
@@ -337,6 +347,7 @@ public class IceCreamModule : MonoBehaviour
 
     private IEnumerator SwitchScoop(int ix, bool activate)
     {
+
         var offset = new Vector3(Random.Range(0f, 1f) - .5f, 1f, Random.Range(0f, .6f) - .3f);
         if (activate)
         {

@@ -214,7 +214,7 @@ public class FakeBombInfo : MonoBehaviour
     public const int numStrikes = 3;
 
     public bool solved;
-    public float timeLeft = 600f;
+    public float timeLeft = 300f;
     public int strikes = 0;
     public string serial;
 

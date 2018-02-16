@@ -13,6 +13,7 @@ public class IceCreamModule : MonoBehaviour
     public KMBombInfo BombInfo;
     public KMBombModule BombModule;
     public KMAudio Audio;
+    public KMModSettings ModSettings;
 
     // Buttons
     public KMSelectable LeftButton;
@@ -31,7 +32,14 @@ public class IceCreamModule : MonoBehaviour
     // Module Identification (for logging)
     int moduleId;
     static int moduleIdCounter = 1;
-
+    
+    // Mod Settings (opening times)
+    class Settings
+    {
+        public bool openingTimeEnabled;
+    }
+    Settings modSettings;
+    
     // Flavour Definitions
     class Flavour
     {
@@ -121,7 +129,9 @@ public class IceCreamModule : MonoBehaviour
     void Start()
     {
         moduleId = moduleIdCounter++;
-
+        
+        modSettings = JsonConvert.DeserializeObject<Settings>(ModSettings.Settings);
+        
         correctFlavours = new int[maxStages];
 
         LeftButton.OnInteract += delegate { HandlePress(-1); return false; };
@@ -292,7 +302,7 @@ public class IceCreamModule : MonoBehaviour
     void Submit()
     {
         // Check if submitted on an even minute.
-        if ((int) (BombInfo.GetTime() / 60) % 2 == 0)
+        if (modSettings.openingTimeEnabled || (int) (BombInfo.GetTime() / 60) % 2 == 0)
         {
             if (currentStage < maxStages && currentFlavour == solution[currentStage])
             {

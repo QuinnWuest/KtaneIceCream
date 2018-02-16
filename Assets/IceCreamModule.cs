@@ -302,7 +302,7 @@ public class IceCreamModule : MonoBehaviour
     void Submit()
     {
         // Check if submitted on an even minute.
-        if (modSettings.openingTimeEnabled || (int) (BombInfo.GetTime() / 60) % 2 == 0)
+        if (!modSettings.openingTimeEnabled || (int) (BombInfo.GetTime() / 60) % 2 == 0)
         {
             if (currentStage < maxStages && currentFlavour == solution[currentStage])
             {

@@ -6,6 +6,7 @@ using IceCream;
 using UnityEngine;
 
 using Random = UnityEngine.Random;
+using Newtonsoft.Json;
 
 public class IceCreamModule : MonoBehaviour
 {
@@ -13,6 +14,7 @@ public class IceCreamModule : MonoBehaviour
     public KMBombInfo BombInfo;
     public KMBombModule BombModule;
     public KMAudio Audio;
+    public KMModSettings ModSettings;
 
     // Buttons
     public KMSelectable LeftButton;
@@ -25,23 +27,29 @@ public class IceCreamModule : MonoBehaviour
 
     // Indicators
     public GameObject[] Scoops;
-    private Vector3[] scoopPositions;
+    private Vector3[] ScoopPositions;
     public Material[] FlavourMaterials;
 
     // Module Identification (for logging)
-    int moduleId;
-    static int moduleIdCounter = 1;
+    int ModuleID;
+    static int ModuleIDCounter = 1;
+
+    // Mod Settings (opening times)
+    class Settings {
+        public bool openingTimeEnabled;
+    }
+    Settings modSettings;
 
     // Flavour Definitions
     class Flavour
     {
-        public string name;
-        public Allergies[] allergies;
+        public string Name;
+        public Allergies[] Allergies;
 
         public Flavour(string name, params Allergies[] alg)
         {
-            this.name = name;
-            this.allergies = alg;
+            this.Name = name;
+            this.Allergies = alg;
         }
     }
     Flavour[] Flavours = new Flavour[] {
@@ -103,26 +111,27 @@ public class IceCreamModule : MonoBehaviour
     };
 
     // Input Tracking
-    int currentFlavour = 0;
-    int[][] flavourOptions;
-    int currentStage = 0;
-    int maxStages = 3;
+    int CurrentFlavor = 0;
+    int[][] FlavorOptions;
+    int CurrentStage = 0;
+    int MaxStages = 3;
 
     // Conditional Tallies
-    bool hasEmptyPortPlate;
-    int lastDigit;
+    bool HasEmptyPortPlate;
+    int LastDigit;
 
     // Solutions
-    int[] list = null;
-    int[] solCustomerNames;
-    int[] solution;
-    int[] correctFlavours;
+    int[] CustomerNamesSolution;
+    int[] Solution;
+    int[] CorrectFlavors;
 
     void Start()
     {
-        moduleId = moduleIdCounter++;
+        ModuleID = ModuleIDCounter++;
 
-        correctFlavours = new int[maxStages];
+        modSettings = JsonConvert.DeserializeObject<Settings>(ModSettings.Settings);
+
+        CorrectFlavors = new int[MaxStages];
 
         LeftButton.OnInteract += delegate { HandlePress(-1); return false; };
         RightButton.OnInteract += delegate { HandlePress(1); return false; };
@@ -130,10 +139,10 @@ public class IceCreamModule : MonoBehaviour
 
         GetComponent<KMBombModule>().OnActivate += OnActivate;
 
-        scoopPositions = new Vector3[Scoops.Length];
+        ScoopPositions = new Vector3[Scoops.Length];
         for (int i = 0; i < Scoops.Length; i++)
         {
-            scoopPositions[i] = Scoops[i].transform.localPosition;
+            ScoopPositions[i] = Scoops[i].transform.localPosition;
             Scoops[i].SetActive(false);
         }
     }
@@ -145,13 +154,13 @@ public class IceCreamModule : MonoBehaviour
         {
             if (plate.Length == 0)
             {
-                hasEmptyPortPlate = true;
+                HasEmptyPortPlate = true;
                 break;
             }
         }
         foreach (int digit in BombInfo.GetSerialNumberNumbers())
         {
-            lastDigit = digit;
+            LastDigit = digit;
         }
 
         GenerateSolutions();
@@ -161,23 +170,25 @@ public class IceCreamModule : MonoBehaviour
 
     void GenerateSolutions()
     {
-        solCustomerNames = new int[maxStages];
-        solution = new int[maxStages];
-        flavourOptions = new int[maxStages][];
+        int[] correctList = null;
+
+        CustomerNamesSolution = new int[MaxStages];
+        Solution = new int[MaxStages];
+        FlavorOptions = new int[MaxStages][];
 
         // Choose correct flavour list if not done already.
-        if (list == null)
+        if (correctList == null)
         {
-            if (BombInfo.GetOnIndicators().Count() > BombInfo.GetOffIndicators().Count()) { list = FlavourLists[0]; }
-            else if (hasEmptyPortPlate) { list = FlavourLists[1]; }
-            else if (BombInfo.GetBatteryCount() >= 3) { list = FlavourLists[2]; }
-            else { list = FlavourLists[3]; }
+            if (BombInfo.GetOnIndicators().Count() > BombInfo.GetOffIndicators().Count()) { correctList = FlavourLists[0]; }
+            else if (HasEmptyPortPlate) { correctList = FlavourLists[1]; }
+            else if (BombInfo.GetBatteryCount() >= 3) { correctList = FlavourLists[2]; }
+            else { correctList = FlavourLists[3]; }
         }
 
         // Generate solution per stage.
-        for (int i = 0; i < maxStages; i++)
+        for (int i = 0; i < MaxStages; i++)
         {
-            solCustomerNames[i] = -1;
+            CustomerNamesSolution[i] = -1;
             int customerID = -1;
             int[] stageFlavours = new int[5];
 
@@ -197,17 +208,17 @@ public class IceCreamModule : MonoBehaviour
             stageFlavours[4] = 9;
 
             // Choose a customer for the stage.
-            while (Array.Exists(solCustomerNames, x => x == customerID))
+            while (Array.Exists(CustomerNamesSolution, x => x == customerID))
                 customerID = Random.Range(0, CustomerNames.Length);
 
             // Determine if the customer is allergic to any of the chosen flavours.
             bool[] bad = new bool[stageFlavours.Length];
             for (int j = 0; j < 3; j++)
             {
-                int allergy = AllergyTable[customerID, lastDigit / 2, j];
+                int allergy = AllergyTable[customerID, LastDigit / 2, j];
                 for (int k = 0; k < stageFlavours.Length; k++)
                 {
-                    if (Flavours[stageFlavours[k]].allergies.Contains((Allergies) allergy) && !bad[k])
+                    if (Flavours[stageFlavours[k]].Allergies.Contains((Allergies) allergy) && !bad[k])
                     {
                         bad[k] = true;
                     }
@@ -221,18 +232,18 @@ public class IceCreamModule : MonoBehaviour
             {
                 if (!bad[l])
                 {
-                    if (Array.IndexOf(list, stageFlavours[l]) < lowestNum)
+                    if (Array.IndexOf(correctList, stageFlavours[l]) < lowestNum)
                     {
-                        lowestNum = Array.IndexOf(list, stageFlavours[l]);
+                        lowestNum = Array.IndexOf(correctList, stageFlavours[l]);
                         sol = l;
                     }
                 }
             }
 
             // Record solution.
-            solution[i] = sol;
-            solCustomerNames[i] = customerID;
-            flavourOptions[i] = stageFlavours;
+            Solution[i] = sol;
+            CustomerNamesSolution[i] = customerID;
+            FlavorOptions[i] = stageFlavours;
 
             //Debug.LogFormat("[Ice Cream #{0}] Stage {1} Flavour Options: '{2}', '{3}', '{4}', '{5}', '{6}'", moduleId, i + 1, Flavours[flavourOptions[i][0]].name, Flavours[flavourOptions[i][1]].name, Flavours[flavourOptions[i][2]].name, Flavours[flavourOptions[i][3]].name, Flavours[flavourOptions[i][4]].name);
         }
@@ -244,15 +255,15 @@ public class IceCreamModule : MonoBehaviour
     void LogCurrentStage() 
     {
         Debug.LogFormat("[Ice Cream #{0}] Stage {1}\nCustomer: {2}\nFlavour Options: {3}, {4}, {5}, {6}, {7}\nSolution: {8}", 
-            moduleId, currentStage + 1, CustomerNames[solCustomerNames[currentStage]], 
-            Flavours[flavourOptions[currentStage][0]].name, Flavours[flavourOptions[currentStage][1]].name, Flavours[flavourOptions[currentStage][2]].name, Flavours[flavourOptions[currentStage][3]].name, Flavours[flavourOptions[currentStage][4]].name, 
-            Flavours[flavourOptions[currentStage][solution[currentStage]]].name);
+            ModuleID, CurrentStage + 1, CustomerNames[CustomerNamesSolution[CurrentStage]], 
+            Flavours[FlavorOptions[CurrentStage][0]].Name, Flavours[FlavorOptions[CurrentStage][1]].Name, Flavours[FlavorOptions[CurrentStage][2]].Name, Flavours[FlavorOptions[CurrentStage][3]].Name, Flavours[FlavorOptions[CurrentStage][4]].Name, 
+            Flavours[FlavorOptions[CurrentStage][Solution[CurrentStage]]].Name);
     }
 
     void UpdateDisplays()
     {
-        CustomerLabel.text = CustomerNames[solCustomerNames[currentStage]];
-        FlavourLabel.text = Flavours[flavourOptions[currentStage][currentFlavour]].name;
+        CustomerLabel.text = CustomerNames[CustomerNamesSolution[CurrentStage]];
+        FlavourLabel.text = Flavours[FlavorOptions[CurrentStage][CurrentFlavor]].Name;
     }
 
     void HandlePress(int button)
@@ -282,9 +293,9 @@ public class IceCreamModule : MonoBehaviour
     void RotateFlavours(int dir)
     {
         // Choose next flavour to display.
-        currentFlavour += dir;
-        if (currentFlavour < 0) currentFlavour += flavourOptions[currentStage].Length;
-        else if (currentFlavour >= flavourOptions[currentStage].Length) currentFlavour -= flavourOptions[currentStage].Length;
+        CurrentFlavor += dir;
+        if (CurrentFlavor < 0) CurrentFlavor += FlavorOptions[CurrentStage].Length;
+        else if (CurrentFlavor >= FlavorOptions[CurrentStage].Length) CurrentFlavor -= FlavorOptions[CurrentStage].Length;
 
         UpdateDisplays();
     }
@@ -292,16 +303,16 @@ public class IceCreamModule : MonoBehaviour
     void Submit()
     {
         // Check if submitted on an even minute.
-        if ((int) (BombInfo.GetTime() / 60) % 2 == 0)
+        if (!modSettings.openingTimeEnabled || (int) (BombInfo.GetTime() / 60) % 2 == 0)
         {
-            if (currentStage < maxStages && currentFlavour == solution[currentStage])
+            if (CurrentStage < MaxStages && CurrentFlavor == Solution[CurrentStage])
             {
                 //Debug.LogFormat("[Ice Cream #{0}] Flavour '{1}' for customer '{2}' submitted correctly.", moduleId, Flavours[flavourOptions[currentStage][currentFlavour]].name, CustomerNames[solCustomerNames[currentStage]]);
-                Debug.LogFormat("[Ice Cream #{0}] {1} is correct.", moduleId, Flavours[flavourOptions[currentStage][currentFlavour]].name);
-                correctFlavours[currentStage] = flavourOptions[currentStage][currentFlavour];
-                Scoops[currentStage].GetComponent<MeshRenderer>().sharedMaterial = FlavourMaterials[flavourOptions[currentStage][currentFlavour]];
-                currentStage++;
-                if (currentStage >= maxStages)
+                Debug.LogFormat("[Ice Cream #{0}] {1} is correct.", ModuleID, Flavours[FlavorOptions[CurrentStage][CurrentFlavor]].Name);
+                CorrectFlavors[CurrentStage] = FlavorOptions[CurrentStage][CurrentFlavor];
+                Scoops[CurrentStage].GetComponent<MeshRenderer>().sharedMaterial = FlavourMaterials[FlavorOptions[CurrentStage][CurrentFlavor]];
+                CurrentStage++;
+                if (CurrentStage >= MaxStages)
                 {
                     BombModule.HandlePass();
                 }
@@ -313,10 +324,10 @@ public class IceCreamModule : MonoBehaviour
             }
             else
             {
-                if (currentStage < maxStages)
+                if (CurrentStage < MaxStages)
                 {
                     //Debug.LogFormat("[Ice Cream #{0}] Flavour '{1}' for customer '{2}' submitted incorrectly.", moduleId, Flavours[flavourOptions[currentStage][currentFlavour]].name, CustomerNames[solCustomerNames[currentStage]]);
-                    Debug.LogFormat("[Ice Cream #{0}] {1} is incorrect.", moduleId, Flavours[flavourOptions[currentStage][currentFlavour]].name);
+                    Debug.LogFormat("[Ice Cream #{0}] {1} is incorrect.", ModuleID, Flavours[FlavorOptions[CurrentStage][CurrentFlavor]].Name);
                     //currentStage = 0;
                     BombModule.HandleStrike();
                     GenerateSolutions();
@@ -327,10 +338,10 @@ public class IceCreamModule : MonoBehaviour
         }
         else
         {
-            if (currentStage < maxStages)
+            if (CurrentStage < MaxStages)
             {
                 ///Debug.LogFormat("[Ice Cream #{0}] Flavour '{1}' for customer '{2}' submitted while parlour is closed.", moduleId, Flavours[flavourOptions[currentStage][currentFlavour]].name, CustomerNames[solCustomerNames[currentStage]]);
-                Debug.LogFormat("[Ice Cream #{0}] {1} submitted when parlour is closed.", moduleId, Flavours[flavourOptions[currentStage][currentFlavour]].name);
+                Debug.LogFormat("[Ice Cream #{0}] {1} submitted when parlour is closed.", ModuleID, Flavours[FlavorOptions[CurrentStage][CurrentFlavor]].Name);
                 //currentStage = 0;
                 BombModule.HandleStrike();
                 GenerateSolutions();
@@ -341,8 +352,8 @@ public class IceCreamModule : MonoBehaviour
 
         // Update stage indicator.
         for (int i = 0; i < 3; i++)
-            if (Scoops[i].activeSelf != currentStage > i)
-                StartCoroutine(SwitchScoop(i, currentStage > i));
+            if (Scoops[i].activeSelf != CurrentStage > i)
+                StartCoroutine(SwitchScoop(i, CurrentStage > i));
     }
 
     private IEnumerator SwitchScoop(int ix, bool activate)
@@ -355,7 +366,7 @@ public class IceCreamModule : MonoBehaviour
             Scoops[ix].transform.localRotation = Quaternion.Euler(Random.Range(0, 360f), Random.Range(0, 360f), Random.Range(0, 360f));
             for (int i = 0; i <= 99; i += 3)
             {
-                Scoops[ix].transform.localPosition = scoopPositions[ix] + (99 - i) * .1f * offset;
+                Scoops[ix].transform.localPosition = ScoopPositions[ix] + (99 - i) * .1f * offset;
                 yield return null;
             }
         }
@@ -363,7 +374,7 @@ public class IceCreamModule : MonoBehaviour
         {
             for (int i = 0; i <= 99; i += 3)
             {
-                Scoops[ix].transform.localPosition = scoopPositions[ix] + i * .1f * offset;
+                Scoops[ix].transform.localPosition = ScoopPositions[ix] + i * .1f * offset;
                 yield return null;
             }
             Scoops[ix].SetActive(false);

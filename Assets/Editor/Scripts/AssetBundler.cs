@@ -123,7 +123,7 @@ public class AssetBundler
             //Copy any other non-Editor managed assemblies to the output folder
             bundler.CopyManagedAssemblies();
 
-            //Create the modInfo.json file
+            //Create the modInfo.json file and copy the preview image if available
             bundler.CreateModInfo();
 
             //Copy the modSettings.json file from Assets into the build
@@ -262,10 +262,10 @@ public class AssetBundler
         string[] defineArray = allDefines.Split(';');
 
         //MonoIsland to compile
-        string classlib_profile = "2.0";
+        int apiCompatibilityLevel = 1; //NET_2_0 compatibility level is enum value 1
         Assembly assembly = Assembly.GetAssembly(typeof(MonoScript));
         var monoIslandType = assembly.GetType("UnityEditor.Scripting.MonoIsland");
-        object monoIsland = Activator.CreateInstance(monoIslandType, BuildTarget.StandaloneWindows, classlib_profile, scriptArray, referenceArray, defineArray, outputFilename);
+        object monoIsland = Activator.CreateInstance(monoIslandType, BuildTarget.StandaloneWindows, apiCompatibilityLevel, scriptArray, referenceArray, defineArray, outputFilename);
 
         //MonoCompiler itself
         var monoCompilerType = assembly.GetType("UnityEditor.Scripting.Compilers.MonoCSharpCompiler");
@@ -439,6 +439,26 @@ public class AssetBundler
     protected void CreateModInfo()
     {
         File.WriteAllText(outputFolder + "/modInfo.json", ModConfig.Instance.ToJson());
+
+        if(ModConfig.PreviewImage != null)
+        {
+            string previewImageAssetPath = AssetDatabase.GetAssetPath(ModConfig.PreviewImage);
+
+            if (!string.IsNullOrEmpty(previewImageAssetPath))
+            {
+                TextureImporter importer = AssetImporter.GetAtPath(previewImageAssetPath) as TextureImporter;
+
+                if (!importer.isReadable || importer.textureCompression != TextureImporterCompression.Uncompressed)
+                {
+                    importer.isReadable = true;
+                    importer.textureCompression = TextureImporterCompression.Uncompressed;
+                    importer.SaveAndReimport();
+                }
+
+                byte[] bytes = ModConfig.PreviewImage.EncodeToPNG();
+                File.WriteAllBytes(outputFolder + "/previewImage.png", bytes);
+            }
+        }
     }
 
     /// <summary>
@@ -597,12 +617,14 @@ public class AssetBundler
         {
             string path = AssetDatabase.GUIDToAssetPath(prefabGUID);
             GameObject go = AssetDatabase.LoadAssetAtPath<GameObject>(path);
+            //Debug.LogWarning(go.name);
             if(go == null)
             {
                 continue;
             }
             foreach(Renderer renderer in go.GetComponentsInChildren<Renderer>())
             {
+                //Debug.LogWarning(renderer.gameObject.name);
                 if(renderer.sharedMaterials != null && renderer.sharedMaterials.Length > 0)
                 {
                     if(renderer.gameObject.GetComponent<KMMaterialInfo>() == null)

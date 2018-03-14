@@ -6,7 +6,7 @@ Material:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: IceCreamScoop3Mat
+  m_Name: MatStrawberry
   m_Shader: {fileID: 7, guid: 0000000000000000f000000000000000, type: 0}
   m_ShaderKeywords: _EMISSION
   m_LightmapFlags: 1
@@ -20,12 +20,6 @@ Material:
       second:
         m_Texture: {fileID: 2800000, guid: 5ff3417f4afe93d4a93f7791857abdd5, type: 3}
         m_Scale: {x: 2, y: 2}
-        m_Offset: {x: 0.3, y: 0.3}
-    - first:
-        name: _Detail
-      second:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - first:
         name: _DetailAlbedoMap
@@ -52,16 +46,10 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - first:
-        name: _LightMap
-      second:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - first:
         name: _MainTex
       second:
-        m_Texture: {fileID: 2800000, guid: a7855c31905e6054ca0fb8a41dfa764c, type: 3}
-        m_Scale: {x: 5, y: 5}
+        m_Texture: {fileID: 2800000, guid: c9939f5ace2fe564bb20b0740ede794b, type: 3}
+        m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - first:
         name: _MetallicGlossMap
@@ -116,9 +104,6 @@ Material:
         name: _Parallax
       second: 0.02
     - first:
-        name: _Shininess
-      second: 0.219
-    - first:
         name: _SmoothnessTextureChannel
       second: 0
     - first:
@@ -136,10 +121,7 @@ Material:
     m_Colors:
     - first:
         name: _Color
-      second: {r: 0.88235295, g: 0.8510321, b: 0.7201557, a: 1}
+      second: {r: 1, g: 0.78676474, b: 0.914706, a: 1}
     - first:
         name: _EmissionColor
       second: {r: 0, g: 0, b: 0, a: 1}
-    - first:
-        name: _SpecColor
-      second: {r: 0.5, g: 0.5, b: 0.5, a: 1}

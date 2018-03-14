@@ -13,5 +13,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: iceCream
   title: Ice Cream
-  version: 1.4
+  description: "I scream, you scream, we all scream for ice cream! Just make sure
+    you aren't allergic...\n\nDesigned by SKiPP and LeGeND. Implemented by SKiPP and
+    ZekNikZ.\n\nModule ID: iceCreamModule\n\nManuals:\nHTML: https://ktane.timwi.de/HTML/Ice%20Cream.html\r\nPDF:
+    https://ktane.timwi.de/PDF/Ice%20Cream.pdf"
+  version: 2.0
   outputFolder: build
+  previewImage: {fileID: 2800000, guid: 4d41edc3b2189724fa157dc23c1c82f5, type: 3}

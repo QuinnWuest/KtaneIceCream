@@ -35,7 +35,8 @@ public class IceCreamModule : MonoBehaviour
     static int ModuleIDCounter = 1;
 
     // Mod Settings (opening times)
-    class Settings {
+    class Settings
+    {
         public bool openingTimeEnabled;
     }
     Settings modSettings;
@@ -252,11 +253,11 @@ public class IceCreamModule : MonoBehaviour
         //Debug.LogFormat("[Ice Cream #{0}] Customers: '{1}', '{2}', '{3}'", moduleId, CustomerNames[solCustomerNames[0]], CustomerNames[solCustomerNames[1]], CustomerNames[solCustomerNames[2]]);
     }
 
-    void LogCurrentStage() 
+    void LogCurrentStage()
     {
-        Debug.LogFormat("[Ice Cream #{0}] Stage {1}\nCustomer: {2}\nFlavour Options: {3}, {4}, {5}, {6}, {7}\nSolution: {8}", 
-            ModuleID, CurrentStage + 1, CustomerNames[CustomerNamesSolution[CurrentStage]], 
-            Flavours[FlavorOptions[CurrentStage][0]].Name, Flavours[FlavorOptions[CurrentStage][1]].Name, Flavours[FlavorOptions[CurrentStage][2]].Name, Flavours[FlavorOptions[CurrentStage][3]].Name, Flavours[FlavorOptions[CurrentStage][4]].Name, 
+        Debug.LogFormat("[Ice Cream #{0}] Stage {1}\nCustomer: {2}\nFlavour Options: {3}, {4}, {5}, {6}, {7}\nSolution: {8}",
+            ModuleID, CurrentStage + 1, CustomerNames[CustomerNamesSolution[CurrentStage]],
+            Flavours[FlavorOptions[CurrentStage][0]].Name, Flavours[FlavorOptions[CurrentStage][1]].Name, Flavours[FlavorOptions[CurrentStage][2]].Name, Flavours[FlavorOptions[CurrentStage][3]].Name, Flavours[FlavorOptions[CurrentStage][4]].Name,
             Flavours[FlavorOptions[CurrentStage][Solution[CurrentStage]]].Name);
     }
 
@@ -381,45 +382,46 @@ public class IceCreamModule : MonoBehaviour
         }
     }
 
-    public string TwitchHelpMessage = "Move left/right with !{0} left and !{0} right. Cycle the flavors with !{0} cycle. Sell the currently selected flavour with !{0} sell. Sell a specific flavour with !{0} sell flavour";
+    public string TwitchHelpMessage = "Move left/right with “!{0} left” and “!{0} right”. Cycle the flavours with “!{0} cycle”. Sell the currently selected flavour with “!{0} sell“. Sell a specific flavour with “!{0} sell flavour”.";
     public string[] TwitchValidCommands = { "^(cycle|left|right|l|r|sell|submit|middle|s|m)( .*)?" };
+
     public IEnumerator ProcessTwitchCommand(string command)
     {
-        command = command.Trim().ToLowerInvariant();
+        string[] pieces = command.Trim().ToLowerInvariant().Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
 
-        string[] pieces = command.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
-
-        if (((pieces[0] == "submit") || (pieces[0] == "sell") || (pieces[0] == "middle") || (pieces[0] == "s") || (pieces[0] == "m"))
-            && (pieces.Length > 1))
+        if (pieces.Length > 1 && (pieces[0] == "submit" || pieces[0] == "sell" || pieces[0] == "middle" || pieces[0] == "s" || pieces[0] == "m"))
         {
-            command = command.Remove(0, pieces[0].Length + 1);
+            yield return null;
+            command = command.Substring(pieces[0].Length).Trim();
             string originalLabel = FlavourLabel.text;
             do
             {
-                string testString = FlavourLabel.text;
-                if (testString.StartsWith(command, StringComparison.InvariantCultureIgnoreCase))
+                if (FlavourLabel.text.StartsWith(command, StringComparison.InvariantCultureIgnoreCase))
                 {
-                    yield return SellButton;
-                    yield return SellButton;
+                    SellButton.OnInteract();
                     yield break;
                 }
-                yield return RightButton;
+                RightButton.OnInteract();
                 yield return new WaitForSeconds(0.25f);
-                yield return RightButton;
-            } while (FlavourLabel.text != originalLabel);
+            }
+            while (FlavourLabel.text != originalLabel);
+            yield return "unsubmittablepenalty";
             yield break;
         }
-        else if (pieces[0] == "cycle")
+        else if (pieces.Length == 1 && pieces[0] == "cycle")
         {
+            yield return null;
             string originalLabel = FlavourLabel.text;
             do
             {
-                yield return RightButton;
+                RightButton.OnInteract();
                 yield return new WaitForSeconds(1.5f);
-                yield return RightButton;
-            } while (FlavourLabel.text != originalLabel);
+            }
+            while (FlavourLabel.text != originalLabel);
             yield break;
         }
+
+        var buttons = new List<KMSelectable>();
 
         for (int i = 0; i < pieces.Length; i++)
         {
@@ -427,14 +429,12 @@ public class IceCreamModule : MonoBehaviour
             {
                 case "l":
                 case "left":
-                    yield return LeftButton;
-                    yield return LeftButton;
+                    buttons.Add(LeftButton);
                     break;
 
                 case "r":
                 case "right":
-                    yield return RightButton;
-                    yield return RightButton;
+                    buttons.Add(RightButton);
                     break;
 
                 case "s":
@@ -442,12 +442,21 @@ public class IceCreamModule : MonoBehaviour
                 case "sell":
                 case "submit":
                 case "middle":
-                    yield return SellButton;
-                    yield return SellButton;
-                    yield break;
+                    buttons.Add(SellButton);
+                    break;
 
                 default:
                     yield break;
+            }
+        }
+
+        if (buttons.Count > 0)
+        {
+            yield return null;
+            foreach (var button in buttons)
+            {
+                button.OnInteract();
+                yield return new WaitForSeconds(.1f);
             }
         }
     }

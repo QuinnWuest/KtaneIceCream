@@ -200,6 +200,7 @@ GameObject:
   - component: {fileID: 114000011930392732}
   - component: {fileID: 114000013617398798}
   - component: {fileID: 114000013846754654}
+  - component: {fileID: 114444957054458106}
   m_Layer: 0
   m_Name: IceCreamModule
   m_TagString: Untagged
@@ -1655,6 +1656,7 @@ MonoBehaviour:
   BombInfo: {fileID: 114000011930392732}
   BombModule: {fileID: 114000011963589724}
   Audio: {fileID: 114000013617398798}
+  ModSettings: {fileID: 114444957054458106}
   LeftButton: {fileID: 114000010096887790}
   RightButton: {fileID: 114000010413011366}
   SellButton: {fileID: 114000013043402824}
@@ -1718,7 +1720,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ShaderNames:
-  - GUI/Text Shader
+  - GUI/KT 3D Text
 --- !u!114 &114163904104928660
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1731,7 +1733,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ShaderNames:
-  - GUI/Text Shader
+  - GUI/KT 3D Text
 --- !u!114 &114205262776522834
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1757,7 +1759,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ShaderNames:
-  - GUI/Text Shader
+  - GUI/KT 3D Text
 --- !u!114 &114354535879754114
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1770,7 +1772,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ShaderNames:
-  - GUI/Text Shader
+  - GUI/KT 3D Text
 --- !u!114 &114401236764721868
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1797,6 +1799,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ShaderNames:
   - Legacy Shaders/Diffuse
+--- !u!114 &114444957054458106
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000011764539312}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -289456416, guid: 45b809be76fd7a3468b6f517bced6f28, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Settings: '{"openingTimeEnabled": true}'
+  SettingsPath: iceCream-settings.txt
 --- !u!114 &114497952724565780
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1835,7 +1850,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ShaderNames:
-  - GUI/Text Shader
+  - GUI/KT 3D Text
 --- !u!114 &114582838268470584
 MonoBehaviour:
   m_ObjectHideFlags: 1

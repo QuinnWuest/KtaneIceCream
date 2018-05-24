@@ -422,7 +422,7 @@ public class IceCreamModule : MonoBehaviour
         }
 		else if (pieces.Length == 1 && pieces[0] == "hours")
 		{
-			yield return $"sendtochat {(modSettings.openingTimeEnabled ? "We are open every other hour today." : "We're open all day today!")}";
+			yield return "sendtochat " + (modSettings.openingTimeEnabled ? "We are open every other hour today." : "We're open all day today!");
 		}
 
         var buttons = new List<KMSelectable>();

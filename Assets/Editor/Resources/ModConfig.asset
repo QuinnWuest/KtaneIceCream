@@ -19,4 +19,4 @@ MonoBehaviour:
     https://ktane.timwi.de/PDF/Ice%20Cream.pdf"
   version: 2.2.1
   outputFolder: build
-  previewImage: {fileID: 2800000, guid: 4d41edc3b2189724fa157dc23c1c82f5, type: 3}
+  previewImage: {fileID: 2800000, guid: 18d4a658e572e1b48ad9c4be76e32150, type: 3}

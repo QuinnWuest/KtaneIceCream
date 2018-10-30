@@ -1677,11 +1677,6 @@ MonoBehaviour:
   - {fileID: 2100000, guid: 70b26619f487b5148af4c660372d376e, type: 2}
   - {fileID: 2100000, guid: 5b134a82af3d70a4f9795ebe79b74525, type: 2}
   - {fileID: 2100000, guid: 5b134a82af3d70a4f9795ebe79b74525, type: 2}
-  TwitchHelpMessage: Move left/right with !{0} left and !{0} right. Cycle the flavors
-    with !{0} cycle. Sell the currently selected flavour with !{0} sell. Sell a specific
-    flavour with !{0} sell flavour
-  TwitchValidCommands:
-  - ^(cycle|left|right|l|r|sell|submit|middle|s|m)( .*)?
 --- !u!114 &114071382663949962
 MonoBehaviour:
   m_ObjectHideFlags: 1

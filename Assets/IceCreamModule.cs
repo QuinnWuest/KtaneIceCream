@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using IceCream;
 using UnityEngine;
@@ -37,8 +38,12 @@ public class IceCreamModule : MonoBehaviour
     // Mod Settings (opening times)
     class Settings
     {
-        public bool openingTimeEnabled;
-    }
+        public bool? openingTimeEnabled = null;
+	    public bool? hoursCommandEnabled = null;
+
+	    public bool OpeningTimeEnabled() { return openingTimeEnabled ?? true; }
+		public bool HoursCommandEnabled() { return hoursCommandEnabled ?? true; }
+	}
     Settings modSettings;
 
     // Flavour Definitions
@@ -130,7 +135,22 @@ public class IceCreamModule : MonoBehaviour
     {
         ModuleID = ModuleIDCounter++;
 
+	    ModSettings.RefreshSettings();
         modSettings = JsonConvert.DeserializeObject<Settings>(ModSettings.Settings);
+
+	    if (!modSettings.openingTimeEnabled.HasValue || !modSettings.hoursCommandEnabled.HasValue)
+	    {
+		    modSettings.openingTimeEnabled = modSettings.OpeningTimeEnabled();
+		    modSettings.hoursCommandEnabled = modSettings.HoursCommandEnabled();
+		    try
+		    {
+				File.WriteAllText(ModSettings.SettingsPath ,JsonConvert.SerializeObject(modSettings, Formatting.Indented));
+		    }
+		    catch
+		    {
+				//
+		    }
+	    }
 
         CorrectFlavors = new int[MaxStages];
 
@@ -304,7 +324,7 @@ public class IceCreamModule : MonoBehaviour
     void Submit()
     {
         // Check if submitted on an even minute.
-        if (!modSettings.openingTimeEnabled || (int) (BombInfo.GetTime() / 60) % 2 == 0)
+        if (!modSettings.OpeningTimeEnabled() || (int) (BombInfo.GetTime() / 60) % 2 == 0)
         {
             if (CurrentStage < MaxStages && CurrentFlavor == Solution[CurrentStage])
             {
@@ -428,7 +448,10 @@ public class IceCreamModule : MonoBehaviour
         }
 		else if (pieces.Length == 1 && pieces[0] == "hours")
 		{
-			yield return "sendtochat " + (modSettings.openingTimeEnabled ? "We are open every other hour today." : "We're open all day today!");
+			if(modSettings.HoursCommandEnabled())
+				yield return "sendtochat " + (modSettings.OpeningTimeEnabled() ? "We are open every other hour today." : "We're open all day today!");
+			else
+				yield return "sendtochat Sorry, hours are currently unavailable. Enjoy your ice cream!";
 		}
 
         var buttons = new List<KMSelectable>();

@@ -391,8 +391,14 @@ public class IceCreamModule : MonoBehaviour
 
         if (pieces.Length > 1 && (pieces[0] == "submit" || pieces[0] == "sell" || pieces[0] == "middle" || pieces[0] == "s" || pieces[0] == "m"))
         {
-            yield return null;
-            command = command.Substring(pieces[0].Length).Trim();
+	        command = command.Substring(pieces[0].Length).Trim();
+	        if (Flavours.All(x => !x.Name.StartsWith(command, StringComparison.InvariantCultureIgnoreCase)))
+	        {
+		        yield return string.Format("sendtochaterror I don't know of a flavour called {0}", command);
+		        yield break;
+	        }
+
+			yield return null;
             string originalLabel = FlavourLabel.text;
             do
             {

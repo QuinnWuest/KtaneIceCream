@@ -402,7 +402,7 @@ public class IceCreamModule : MonoBehaviour
         }
     }
 
-    [NonSerialized] public string TwitchHelpMessage = "Move left/right with “!{0} left” and “!{0} right”. Cycle the flavours with “!{0} cycle”. Sell the currently selected flavour with “!{0} sell“. Sell a specific flavour with “!{0} sell flavour”. Check the opening hours with “!{0} hours”.";
+    [NonSerialized] public string TwitchHelpMessage = "!{0} left | !{0} right | !{0} cycle | !{0} sell [sells currently selected flavour] | !{0} sell cookies [sells Cookies & Cream] | !{0} hours [check opening hours]";
 	[NonSerialized] public string[] TwitchValidCommands = { "^(cycle|left|right|l|r|sell|submit|middle|s|m|hours)( .*)?" };
 
     public IEnumerator ProcessTwitchCommand(string command)
@@ -452,6 +452,7 @@ public class IceCreamModule : MonoBehaviour
 				yield return "sendtochat " + (modSettings.OpeningTimeEnabled() ? "We are open every other hour today." : "We're open all day today!");
 			else
 				yield return "sendtochat Sorry, hours are currently unavailable. Enjoy your ice cream!";
+            yield break;
 		}
 
         var buttons = new List<KMSelectable>();

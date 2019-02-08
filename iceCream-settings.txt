@@ -1,0 +1,4 @@
+{
+  "openingTimeEnabled": true,
+  "hoursCommandEnabled": true
+}

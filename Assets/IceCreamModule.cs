@@ -3,11 +3,11 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using IceCream;
-using UnityEngine;
-
-using Random = UnityEngine.Random;
 using Newtonsoft.Json;
+using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class IceCreamModule : MonoBehaviour
 {
@@ -32,18 +32,19 @@ public class IceCreamModule : MonoBehaviour
     public Material[] FlavourMaterials;
 
     // Module Identification (for logging)
-    int ModuleID;
-    static int ModuleIDCounter = 1;
+    private int _moduleID;
+    private static int _moduleIDCounter = 1;
+    private bool _isSolved;
 
     // Mod Settings (opening times)
     class Settings
     {
         public bool? openingTimeEnabled = null;
-	    public bool? hoursCommandEnabled = null;
+        public bool? hoursCommandEnabled = null;
 
-	    public bool OpeningTimeEnabled() { return openingTimeEnabled ?? true; }
-		public bool HoursCommandEnabled() { return hoursCommandEnabled ?? true; }
-	}
+        public bool OpeningTimeEnabled() { return openingTimeEnabled ?? true; }
+        public bool HoursCommandEnabled() { return hoursCommandEnabled ?? true; }
+    }
     Settings modSettings;
 
     // Flavour Definitions
@@ -54,8 +55,8 @@ public class IceCreamModule : MonoBehaviour
 
         public Flavour(string name, params Allergies[] alg)
         {
-            this.Name = name;
-            this.Allergies = alg;
+            Name = name;
+            Allergies = alg;
         }
     }
     Flavour[] Flavours = new Flavour[] {
@@ -133,24 +134,24 @@ public class IceCreamModule : MonoBehaviour
 
     void Start()
     {
-        ModuleID = ModuleIDCounter++;
+        _moduleID = _moduleIDCounter++;
 
-	    ModSettings.RefreshSettings();
+        ModSettings.RefreshSettings();
         modSettings = JsonConvert.DeserializeObject<Settings>(ModSettings.Settings);
 
-	    if (!modSettings.openingTimeEnabled.HasValue || !modSettings.hoursCommandEnabled.HasValue)
-	    {
-		    modSettings.openingTimeEnabled = modSettings.OpeningTimeEnabled();
-		    modSettings.hoursCommandEnabled = modSettings.HoursCommandEnabled();
-		    try
-		    {
-				File.WriteAllText(ModSettings.SettingsPath ,JsonConvert.SerializeObject(modSettings, Formatting.Indented));
-		    }
-		    catch
-		    {
-				//
-		    }
-	    }
+        if (!modSettings.openingTimeEnabled.HasValue || !modSettings.hoursCommandEnabled.HasValue)
+        {
+            modSettings.openingTimeEnabled = modSettings.OpeningTimeEnabled();
+            modSettings.hoursCommandEnabled = modSettings.HoursCommandEnabled();
+            try
+            {
+                File.WriteAllText(ModSettings.SettingsPath, JsonConvert.SerializeObject(modSettings, Formatting.Indented));
+            }
+            catch
+            {
+                //
+            }
+        }
 
         CorrectFlavors = new int[MaxStages];
 
@@ -276,7 +277,7 @@ public class IceCreamModule : MonoBehaviour
     void LogCurrentStage()
     {
         Debug.LogFormat("[Ice Cream #{0}] Stage {1}\nCustomer: {2}\nFlavour Options: {3}, {4}, {5}, {6}, {7}\nSolution: {8}",
-            ModuleID, CurrentStage + 1, CustomerNames[CustomerNamesSolution[CurrentStage]],
+            _moduleID, CurrentStage + 1, CustomerNames[CustomerNamesSolution[CurrentStage]],
             Flavours[FlavorOptions[CurrentStage][0]].Name, Flavours[FlavorOptions[CurrentStage][1]].Name, Flavours[FlavorOptions[CurrentStage][2]].Name, Flavours[FlavorOptions[CurrentStage][3]].Name, Flavours[FlavorOptions[CurrentStage][4]].Name,
             Flavours[FlavorOptions[CurrentStage][Solution[CurrentStage]]].Name);
     }
@@ -289,7 +290,7 @@ public class IceCreamModule : MonoBehaviour
 
     void HandlePress(int button)
     {
-        Audio.PlaySoundAtTransform("tick", this.transform);
+        Audio.PlaySoundAtTransform("tick", transform);
 
         switch (button)
         {
@@ -329,13 +330,14 @@ public class IceCreamModule : MonoBehaviour
             if (CurrentStage < MaxStages && CurrentFlavor == Solution[CurrentStage])
             {
                 //Debug.LogFormat("[Ice Cream #{0}] Flavour '{1}' for customer '{2}' submitted correctly.", moduleId, Flavours[flavourOptions[currentStage][currentFlavour]].name, CustomerNames[solCustomerNames[currentStage]]);
-                Debug.LogFormat("[Ice Cream #{0}] {1} is correct.", ModuleID, Flavours[FlavorOptions[CurrentStage][CurrentFlavor]].Name);
+                Debug.LogFormat("[Ice Cream #{0}] {1} is correct.", _moduleID, Flavours[FlavorOptions[CurrentStage][CurrentFlavor]].Name);
                 CorrectFlavors[CurrentStage] = FlavorOptions[CurrentStage][CurrentFlavor];
                 Scoops[CurrentStage].GetComponent<MeshRenderer>().sharedMaterial = FlavourMaterials[FlavorOptions[CurrentStage][CurrentFlavor]];
                 CurrentStage++;
                 if (CurrentStage >= MaxStages)
                 {
                     BombModule.HandlePass();
+                    _isSolved = true;
                 }
                 else
                 {
@@ -348,7 +350,7 @@ public class IceCreamModule : MonoBehaviour
                 if (CurrentStage < MaxStages)
                 {
                     //Debug.LogFormat("[Ice Cream #{0}] Flavour '{1}' for customer '{2}' submitted incorrectly.", moduleId, Flavours[flavourOptions[currentStage][currentFlavour]].name, CustomerNames[solCustomerNames[currentStage]]);
-                    Debug.LogFormat("[Ice Cream #{0}] {1} is incorrect.", ModuleID, Flavours[FlavorOptions[CurrentStage][CurrentFlavor]].Name);
+                    Debug.LogFormat("[Ice Cream #{0}] {1} is incorrect.", _moduleID, Flavours[FlavorOptions[CurrentStage][CurrentFlavor]].Name);
                     //currentStage = 0;
                     BombModule.HandleStrike();
                     GenerateSolutions();
@@ -362,7 +364,7 @@ public class IceCreamModule : MonoBehaviour
             if (CurrentStage < MaxStages)
             {
                 ///Debug.LogFormat("[Ice Cream #{0}] Flavour '{1}' for customer '{2}' submitted while parlour is closed.", moduleId, Flavours[flavourOptions[currentStage][currentFlavour]].name, CustomerNames[solCustomerNames[currentStage]]);
-                Debug.LogFormat("[Ice Cream #{0}] {1} submitted when parlour is closed.", ModuleID, Flavours[FlavorOptions[CurrentStage][CurrentFlavor]].Name);
+                Debug.LogFormat("[Ice Cream #{0}] {1} submitted when parlour is closed.", _moduleID, Flavours[FlavorOptions[CurrentStage][CurrentFlavor]].Name);
                 //currentStage = 0;
                 BombModule.HandleStrike();
                 GenerateSolutions();
@@ -402,23 +404,27 @@ public class IceCreamModule : MonoBehaviour
         }
     }
 
-    [NonSerialized] public string TwitchHelpMessage = "!{0} left | !{0} right | !{0} cycle | !{0} sell [sells currently selected flavour] | !{0} sell cookies [sells Cookies & Cream] | !{0} hours [check opening hours]";
-	[NonSerialized] public string[] TwitchValidCommands = { "^(cycle|left|right|l|r|sell|submit|middle|s|m|hours)( .*)?" };
+#pragma warning disable 414
+    private readonly string TwitchHelpMessage = "!{0} left | !{0} right | !{0} cycle | !{0} sell [sells currently selected flavour] | !{0} sell cookies [sells Cookies & Cream] | !{0} hours [check opening hours]";
+#pragma warning restore 414
 
     public IEnumerator ProcessTwitchCommand(string command)
     {
+        if (!Regex.IsMatch(command, "^(cycle|left|right|l|r|sell|submit|middle|s|m|hours)( .*)?", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant))
+            yield break;
+
         string[] pieces = command.Trim().ToLowerInvariant().Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
 
         if (pieces.Length > 1 && (pieces[0] == "submit" || pieces[0] == "sell" || pieces[0] == "middle" || pieces[0] == "s" || pieces[0] == "m"))
         {
-	        command = command.Substring(pieces[0].Length).Trim();
-	        if (Flavours.All(x => !x.Name.StartsWith(command, StringComparison.InvariantCultureIgnoreCase)))
-	        {
-		        yield return string.Format("sendtochaterror I don't know of a flavour called {0}", command);
-		        yield break;
-	        }
+            command = command.Substring(pieces[0].Length).Trim();
+            if (Flavours.All(x => !x.Name.StartsWith(command, StringComparison.InvariantCultureIgnoreCase)))
+            {
+                yield return string.Format("sendtochaterror I don't know of a flavour called {0}", command);
+                yield break;
+            }
 
-			yield return null;
+            yield return null;
             string originalLabel = FlavourLabel.text;
             do
             {
@@ -446,14 +452,14 @@ public class IceCreamModule : MonoBehaviour
             while (FlavourLabel.text != originalLabel);
             yield break;
         }
-		else if (pieces.Length == 1 && pieces[0] == "hours")
-		{
-			if(modSettings.HoursCommandEnabled())
-				yield return "sendtochat " + (modSettings.OpeningTimeEnabled() ? "We are open every other hour today." : "We're open all day today!");
-			else
-				yield return "sendtochat Sorry, hours are currently unavailable. Enjoy your ice cream!";
+        else if (pieces.Length == 1 && pieces[0] == "hours")
+        {
+            if (modSettings.HoursCommandEnabled())
+                yield return "sendtochat " + (modSettings.OpeningTimeEnabled() ? "We are open every other hour today." : "We're open all day today!");
+            else
+                yield return "sendtochat Sorry, hours are currently unavailable. Enjoy your ice cream!";
             yield break;
-		}
+        }
 
         var buttons = new List<KMSelectable>();
 
@@ -492,6 +498,25 @@ public class IceCreamModule : MonoBehaviour
                 button.OnInteract();
                 yield return new WaitForSeconds(.1f);
             }
+        }
+    }
+
+    IEnumerator TwitchHandleForcedSolve()
+    {
+        while (!_isSolved)
+        {
+            while (CurrentFlavor != Solution[CurrentStage])
+            {
+                RightButton.OnInteract();
+                yield return new WaitForSeconds(.1f);
+            }
+
+            if (modSettings.OpeningTimeEnabled())
+                while ((int) (BombInfo.GetTime() / 60) % 2 != 0)
+                    yield return true;
+
+            SellButton.OnInteract();
+            yield return new WaitForSeconds(.25f);
         }
     }
 }

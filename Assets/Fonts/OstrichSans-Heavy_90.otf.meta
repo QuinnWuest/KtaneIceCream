@@ -1,17 +1,15 @@
 fileFormatVersion: 2
-guid: 90922b4319f23db42ac13dbbcc63a903
+guid: 4b95304da444d9c43be86d27b99befb3
 timeCreated: 1464546457
 licenseType: Pro
 TrueTypeFontImporter:
-  serializedVersion: 4
+  serializedVersion: 3
   fontSize: 16
   forceTextureCase: -2
-  characterSpacing: 0
-  characterPadding: 1
+  characterSpacing: 1
+  characterPadding: 0
   includeFontData: 1
-  fontName: Ostrich Sans
-  fontNames:
-  - Ostrich Sans
+  fontNames: []
   fallbackFontReferences: []
   customCharacters: 
   fontRenderingMode: 0

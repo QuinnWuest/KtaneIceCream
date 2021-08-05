@@ -376,29 +376,33 @@ public class IceCreamModule : MonoBehaviour
         // Update stage indicator.
         for (int i = 0; i < 3; i++)
             if (Scoops[i].activeSelf != CurrentStage > i)
-                StartCoroutine(SwitchScoop(i, CurrentStage > i));
+                StartCoroutine(ScoopAnimation(i, CurrentStage > i));
     }
 
-    private IEnumerator SwitchScoop(int ix, bool activate)
+    private IEnumerator ScoopAnimation(int ix, bool activate)
     {
-
-        var offset = new Vector3(Random.Range(0f, 1f) - .5f, 1f, Random.Range(0f, .6f) - .3f);
+        var offset = ScoopPositions[ix] + new Vector3(Random.Range(0f, 10f) - 5f, 10f, Random.Range(0f, 6f) - 3f);
+        var duration = .925f;
+        var elapsed = 0f;
         if (activate)
         {
             Scoops[ix].SetActive(true);
             Scoops[ix].transform.localRotation = Quaternion.Euler(Random.Range(0, 360f), Random.Range(0, 360f), Random.Range(0, 360f));
-            for (int i = 0; i <= 99; i += 3)
+            while (elapsed < duration)
             {
-                Scoops[ix].transform.localPosition = ScoopPositions[ix] + (99 - i) * .1f * offset;
+                Scoops[ix].transform.localPosition = Vector3.Lerp(offset, ScoopPositions[ix], elapsed / duration);
                 yield return null;
+                elapsed += Time.deltaTime;
             }
+            Scoops[ix].transform.localPosition = ScoopPositions[ix];
         }
         else
         {
-            for (int i = 0; i <= 99; i += 3)
+            while (elapsed < duration)
             {
-                Scoops[ix].transform.localPosition = ScoopPositions[ix] + i * .1f * offset;
                 yield return null;
+                elapsed += Time.deltaTime;
+                Scoops[ix].transform.localPosition = Vector3.Lerp(ScoopPositions[ix], offset, elapsed / duration);
             }
             Scoops[ix].SetActive(false);
         }

@@ -1,0 +1,10 @@
+{
+  "name": "IceCream-Editor",
+  "references": [
+    "IceCream"
+  ],
+  "includePlatforms": [
+    "Editor"
+  ],
+  "excludePlatforms": []
+}

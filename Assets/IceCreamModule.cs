@@ -30,6 +30,7 @@ public class IceCreamModule : MonoBehaviour
     public GameObject[] Scoops;
     private Vector3[] ScoopPositions;
     public Material[] FlavourMaterials;
+    public GameObject OpenSign;
 
     // Module Identification (for logging)
     private int _moduleID;
@@ -152,6 +153,8 @@ public class IceCreamModule : MonoBehaviour
                 //
             }
         }
+
+        OpenSign.SetActive(modSettings != null && !modSettings.OpeningTimeEnabled());
 
         CorrectFlavors = new int[MaxStages];
 

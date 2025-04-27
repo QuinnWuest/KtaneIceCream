@@ -36,6 +36,7 @@ public class IceCreamModule : MonoBehaviour
     private int _moduleID;
     private static int _moduleIDCounter = 1;
     private bool _isSolved;
+    private bool _isActivated;
 
     // Mod Settings (opening times)
     class Settings
@@ -137,6 +138,9 @@ public class IceCreamModule : MonoBehaviour
     {
         _moduleID = _moduleIDCounter++;
 
+        CustomerLabel.text = "";
+        FlavourLabel.text = "ICE CREAM";
+
         ModSettings.RefreshSettings();
         modSettings = JsonConvert.DeserializeObject<Settings>(ModSettings.Settings);
 
@@ -174,6 +178,7 @@ public class IceCreamModule : MonoBehaviour
 
     void OnActivate()
     {
+        _isActivated = true;
         // Conditional tally lookup.
         foreach (object[] plate in BombInfo.GetPortPlates())
         {
@@ -294,7 +299,8 @@ public class IceCreamModule : MonoBehaviour
     void HandlePress(int button)
     {
         Audio.PlaySoundAtTransform("tick", transform);
-
+        if (!_isActivated)
+            return;
         switch (button)
         {
             case -1:
